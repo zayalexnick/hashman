@@ -1,0 +1,33 @@
+import path from 'path';
+import Config from 'webpack-config';
+import HTMLPlugin from 'html-webpack-plugin';
+
+export default new Config().merge({
+    entry: [ 'babel-polyfill', path.resolve(__dirname, '..', 'src', 'index.js') ],
+    output: { path: path.resolve(__dirname, '..', 'build') },
+    resolve: {
+        extensions: ['.jsx', '.js'],
+        alias: {
+            constants: path.resolve(__dirname, '..', 'src', 'constants'),
+            modules: path.resolve(__dirname, '..', 'src', 'modules'),
+            components: path.resolve(__dirname, '..', 'src', 'components'),
+            scenes: path.resolve(__dirname, '..', 'src', 'scenes'),
+            types: path.resolve(__dirname, '..', 'src', 'types')
+        }
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                use: 'babel-loader',
+                exclude: /node_modules/
+            }
+        ]
+    },
+    plugins: [
+        new HTMLPlugin({
+            template: path.resolve(__dirname, '..', 'src', 'index.html'),
+            inject: 'body'
+        })
+    ]
+});
