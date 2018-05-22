@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from 'api';
 import { createAction } from 'redux-act';
 
 import { Login } from './types';
@@ -13,9 +13,19 @@ export const login = (data: Login) => {
     return async (dispatch) => {
         dispatch(authRequested());
 
-        try
+        api.post('react_auth', data)
+            .then((response) => console.log('OK', response))
+            .catch((error) => {
+                if (error.response) console.log('RESPONSE', error.response);
+                if (error.request) console.log('REQUEST', error.request);
+                if (error.message) console.log('MESSAGE', error.message);
+                if (error.config) console.log('CONFIG', error.config);
+                console.log(error.status);
+            });
+        /*try
         {
-            const response = await axios.post('/api/react_auth', data);
+            const response = await api.post('react_auth', data);
+            console.log(response);
             const result: IResult = response.data;
 
             if (result.ErrorCode < 0) dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
@@ -23,8 +33,8 @@ export const login = (data: Login) => {
         }
         catch(e)
         {
-            dispatch(authFailed({ code: -1, message: 'Ошибка сервера' }))
-        }
+            dispatch(authFailed({ code: -100, message: 'Ошибка сервера' }))
+        }*/
 
         dispatch(authReceived());
     }

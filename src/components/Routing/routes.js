@@ -1,25 +1,29 @@
 import React from 'react';
+import Main from 'scenes/Main';
 import Auth from 'scenes/Auth';
-import Login from 'modules/Login';
+import SignIn from 'scenes/Auth/SignIn';
 
 type Routes = {
     path: string,
-    component?: React.Component,
+    component: React.Component,
     routes?: Array<Routes>
 }
 
 const routes: Array<Routes> = [
     {
-        path: '/',
-        component: null,
+        path: "/",
+        component: Main,
+        routes: {
+
+        }
     },
     {
-        path: '/auth',
+        path: "/auth",
         component: Auth,
         routes: [
             {
-                path: '/auth/login',
-                component: Login
+                path: '/auth/signin',
+                component: SignIn
             }
         ]
     }
