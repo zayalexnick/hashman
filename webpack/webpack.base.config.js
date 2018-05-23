@@ -30,6 +30,10 @@ export default new Config().merge({
                         loader: 'url-loader'
                     }
                 ]
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
             }
         ]
     },

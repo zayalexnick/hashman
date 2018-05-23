@@ -10,7 +10,7 @@ type State = {
 
 const initialState: State = {
     loading: false,
-    authorized: false,
+    authorized: null,
     error: {
         code: null,
         message: ''
@@ -20,8 +20,9 @@ const initialState: State = {
 const reducer = createReducer({
     [actions.authRequested]: (state) => ({ ...state, loading: true }),
     [actions.authReceived]: (state) => ({ ...state, loading: false }),
-    [actions.authFailed]: (state, payload: IError) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
-    [actions.authSuccessed]: (state) => ({ ...state, authorized: true })
+    [actions.authFailed]: (state, payload: IError) => ({ ...state, authorized: false, error: { ...state.error, code: payload.code, message: payload.message } }),
+    [actions.authSuccessed]: (state) => ({ ...state, authorized: true }),
+    [actions.authLogouted]: () => ({ ...initialState, authorized: false })
 }, initialState);
 
 export default reducer;

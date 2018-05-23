@@ -1,7 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://cp.gpuserver.ru/'
+    //baseURL: 'http://cp.gpuserver.ru/',
+    withCredentials: true,
+    //transformRequest: [(data) => JSON.stringify(data.data)],
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
 });
 
 export default api;

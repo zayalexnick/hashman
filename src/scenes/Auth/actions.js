@@ -8,6 +8,7 @@ export const authRequested = createAction('[AUTH] REQUESTED');
 export const authReceived = createAction('[AUTH] RECEIVED');
 export const authFailed = createAction('[AUTH] FAILED');
 export const authSuccessed = createAction('[AUTH] SUCCESSED');
+export const authLogouted = createAction('[AUTH] LOGOUTED');
 
 export const login = (data: Login) => {
     return async (dispatch) => {
@@ -15,8 +16,7 @@ export const login = (data: Login) => {
 
         try
         {
-            const response = await api.post('react_auth', data);
-            console.log(response);
+            const response = await api.post('/api/react_auth', data);
             const result: IResult = response.data;
 
             if (result.ErrorCode < 0) dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
@@ -28,5 +28,36 @@ export const login = (data: Login) => {
         }
 
         dispatch(authReceived());
+    }
+};
+
+export const logout = () => {
+    return async (dispatch) => {
+        try
+        {
+            await api.get('/api/react_logoff');
+            dispatch(authLogouted());
+        }
+        catch (e)
+        {
+            console.log(e);
+        }
+    }
+};
+
+export const checkAuth = async () => {
+    try
+    {
+        const response = await api.post('/api/react_auth');
+        const result: IResult = response.data;
+        console.log(result);
+
+        if (result.ErrorCode < 0) return false;
+
+        return true;
+    }
+    catch (e)
+    {
+        console.log(e);
     }
 };

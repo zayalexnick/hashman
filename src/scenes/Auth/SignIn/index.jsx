@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { SignInStyleWrapper, LoginContentWrapper, LoginContent, LogoWrapper, SignInForm, LogoLink, InputWrapper, LeftRightComponent, Input, HelperText, OtherLogin, ForgotPassword, SignUp } from './styles';
@@ -17,14 +18,25 @@ export default class SignIn extends Component<null, Login>
         password: ''
     };
 
+    componentDidMount()
+    {
+        this.props.login();
+    }
+
     loginHandler = () => {
         this.props.login(this.state);
-    }
+    };
+
+    keyPressHandler = (e) => {
+        if (e.key === 'Enter') this.props.login(this.state);
+    };
 
     render()
     {
         const { code, message } = this.props.auth.error;
-        const { loading } = this.props.auth;
+        const { loading, authorized } = this.props.auth;
+
+        if (authorized && authorized !== null) return <Redirect to="/" />;
 
         return (
             <SignInStyleWrapper>
@@ -38,13 +50,19 @@ export default class SignIn extends Component<null, Login>
                                 <Loader />
                             </LoaderWrapper>
                             <InputWrapper>
-                                <Alert closed={code >= 0} message={message} />
+                                <Alert closed={code >= 0 || code == -2} message={message} />
                             </InputWrapper>
                             <InputWrapper>
-                                <Input size="large" placeholder="Логин" onChange={(e) => this.setState({ login: e.target.value })} />
+                                <Input size="large" placeholder="Логин"
+                                       onChange={(e) => this.setState({ login: e.target.value })}
+                                       onKeyPress={this.keyPressHandler}
+                                />
                             </InputWrapper>
                             <InputWrapper>
-                                <Input size="large" type="password" placeholder="Пароль" onChange={(e) => this.setState({ password: e.target.value })} />
+                                <Input size="large" type="password" placeholder="Пароль"
+                                       onChange={(e) => this.setState({ password: e.target.value })}
+                                       onKeyPress={this.keyPressHandler}
+                                />
                             </InputWrapper>
                             <LeftRightComponent>
                                 <HelperText>Все поля обязательны</HelperText>

@@ -3,6 +3,8 @@ import { render } from 'react-dom';
 import WebFont from 'webfontloader';
 import { Provider } from 'react-redux';
 
+import 'antd/dist/antd.css';
+
 import App from 'scenes/App';
 
 import { injectGlobal } from 'styled-components';
@@ -24,6 +26,7 @@ injectGlobal`
     
     body {
         font-family: "Roboto", sans-serif;
+        line-height: 1;
     }
 `;
 

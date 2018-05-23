@@ -5,3 +5,7 @@ export const lightBlue = '#1890ff';
 export const red = '#f64744';
 export const lightGray = '#c1c1c1';
 export const dark = '#797979';
+export const sidebar = '#2d3446';
+export const navlink = '#788195';
+export const black = '#000000';
+export const bg = '#f1f3f6';
