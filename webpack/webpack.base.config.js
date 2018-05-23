@@ -13,7 +13,6 @@ export default new Config().merge({
             components: path.resolve(__dirname, '..', 'src', 'components'),
             scenes: path.resolve(__dirname, '..', 'src', 'scenes'),
             types: path.resolve(__dirname, '..', 'src', 'types'),
-            constants: path.resolve(__dirname, '..', 'src', 'constants'),
             api: path.resolve(__dirname, '..', 'src', 'api'),
         }
     },

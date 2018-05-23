@@ -1,0 +1,927 @@
+{
+  "ErrorCode": 0,
+  "ErrorString": null,
+  "Data": [
+    {
+      "ServerID": 3,
+      "ServerName": "Коттедж",
+      "Rigs": [
+        {
+          "RigID": 1,
+          "Name": "1060",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 61,
+          "Hashrate": "56.29 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 8,
+          "Name": "AI1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 71,
+          "Hashrate": "154.13 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 12,
+          "Name": "Ai2",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 72,
+          "Hashrate": "151.73 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 7,
+          "Name": "Ai3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 69,
+          "Hashrate": "156.7 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 2,
+          "Name": "Ed1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 54,
+          "Hashrate": "160.41 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 9,
+          "Name": "KOST1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 71,
+          "Hashrate": "149.37 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 15,
+          "Name": "KOST2",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 51,
+          "Hashrate": "48.17 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 3,
+          "Name": "MAK1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 69,
+          "Hashrate": "52.95 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 11,
+          "Name": "MAK2",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 74,
+          "Hashrate": "161.21 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 4,
+          "Name": "Mak3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 68,
+          "Hashrate": "168.3 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 14,
+          "Name": "Mak4",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 68,
+          "Hashrate": "171.01 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 5,
+          "Name": "Mak5",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 59,
+          "Hashrate": "156.82 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 13,
+          "Name": "MAK6",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 67,
+          "Hashrate": "159.84 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 6,
+          "Name": "Ole1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 63,
+          "Hashrate": "163.67 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 10,
+          "Name": "Ole2",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 60,
+          "Hashrate": "171.07 MH",
+          "Coin": "ETH"
+        }
+      ]
+    },
+    {
+      "ServerID": 4,
+      "ServerName": "Контейнер",
+      "Rigs": [
+        {
+          "RigID": 269,
+          "Name": "000427a91aa9",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 83,
+          "Hashrate": "13.87 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 271,
+          "Name": "00068f349b43",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 74,
+          "Hashrate": "13.72 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 252,
+          "Name": "000c7abc8167",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 82,
+          "Hashrate": "13.66 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 239,
+          "Name": "0014f931c802",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 81,
+          "Hashrate": "13.75 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 240,
+          "Name": "001919eea3ed",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 87,
+          "Hashrate": "13.68 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 179,
+          "Name": "00210de14356",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 83,
+          "Hashrate": "13.7 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 262,
+          "Name": "003a40f64d70",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 82,
+          "Hashrate": "13.71 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 251,
+          "Name": "0048e9c119a6",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 76,
+          "Hashrate": "14.2 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 237,
+          "Name": "004faddf02ba",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "13.86 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 274,
+          "Name": "0051cd8c3ee8",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 69,
+          "Hashrate": "13.67 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 281,
+          "Name": "006660096c4d",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 73,
+          "Hashrate": "13.74 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 246,
+          "Name": "006d60471c9d",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 72,
+          "Hashrate": "13.75 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 266,
+          "Name": "007adfe435d0",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 88,
+          "Hashrate": "13.69 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 260,
+          "Name": "0082126ad11c",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 83,
+          "Hashrate": "13.69 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 280,
+          "Name": "0089eddb674c",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 82,
+          "Hashrate": "13.8 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 245,
+          "Name": "009e7b0ebf50",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 77,
+          "Hashrate": "14.11 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 180,
+          "Name": "00af16e20aa0",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 86,
+          "Hashrate": "13.76 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 248,
+          "Name": "00b720114e75",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 74,
+          "Hashrate": "13.59 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 270,
+          "Name": "00c1a7a16462",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "13.61 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 250,
+          "Name": "00c293af9794",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 77,
+          "Hashrate": "13.8 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 268,
+          "Name": "00cb1f77ef0f",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 68,
+          "Hashrate": "13.91 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 242,
+          "Name": "00cba783d29f",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 84,
+          "Hashrate": "13.58 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 275,
+          "Name": "00e343deff20",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 81,
+          "Hashrate": "14.27 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 255,
+          "Name": "00e98dd3facc",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "13.62 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 236,
+          "Name": "00eecc696eaf",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 76,
+          "Hashrate": "13.62 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 234,
+          "Name": "023b270cfe16",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 90,
+          "Hashrate": "14.07 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 231,
+          "Name": "02558cfe1ba9",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 83,
+          "Hashrate": "13.81 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 243,
+          "Name": "02bec57ce3cd",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 76,
+          "Hashrate": "14.18 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 284,
+          "Name": "02ea691bdd5c",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 70,
+          "Hashrate": "13.76 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 230,
+          "Name": "04c7577588b5",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 95,
+          "Hashrate": "13.94 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 254,
+          "Name": "04f7180af00b",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 68,
+          "Hashrate": "13.66 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 257,
+          "Name": "04f76c08c48d",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 90,
+          "Hashrate": "13.68 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 286,
+          "Name": "06ea32424ac1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 62,
+          "Hashrate": "14.26 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 278,
+          "Name": "0810f902334c",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 82,
+          "Hashrate": "13.68 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 233,
+          "Name": "0832a2d362c3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 94,
+          "Hashrate": "13.79 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 178,
+          "Name": "0881c7595ef8",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 69,
+          "Hashrate": "13.73 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 272,
+          "Name": "0a2bdabda1d5",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 66,
+          "Hashrate": "13.8 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 253,
+          "Name": "0e12dcc654d5",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 86,
+          "Hashrate": "13.87 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 264,
+          "Name": "1668546591e3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 76,
+          "Hashrate": "13.65 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 244,
+          "Name": "1a46bbd75198",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 68,
+          "Hashrate": "13.75 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 256,
+          "Name": "1aaa6d3da479",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 79,
+          "Hashrate": "14.28 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 259,
+          "Name": "24214249dd0e",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 90,
+          "Hashrate": "13.59 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 258,
+          "Name": "249868482949",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 86,
+          "Hashrate": "13.57 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 285,
+          "Name": "2a146caf8c38",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 79,
+          "Hashrate": "13.68 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 282,
+          "Name": "2aa6fba3d053",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 82,
+          "Hashrate": "13.66 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 232,
+          "Name": "2ab2ad5a12b7",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 79,
+          "Hashrate": "14.1 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 287,
+          "Name": "2c98627b9a04",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 77,
+          "Hashrate": "14.07 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 261,
+          "Name": "30bf33206483",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "13.7 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 276,
+          "Name": "361657545dc9",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 74,
+          "Hashrate": "13.7 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 273,
+          "Name": "3a7802ed2c77",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 83,
+          "Hashrate": "13.65 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 283,
+          "Name": "3c2859050b3f",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 95,
+          "Hashrate": "13.85 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 279,
+          "Name": "3eba068e0b69",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "13.54 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 247,
+          "Name": "3edcd5bc77fa",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 84,
+          "Hashrate": "13.62 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 238,
+          "Name": "406faacac02f",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "14.12 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 235,
+          "Name": "483e6ab176c3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 77,
+          "Hashrate": "13.6 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 267,
+          "Name": "4866aa75d8c3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 79,
+          "Hashrate": "13.67 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 277,
+          "Name": "4a1b407821c4",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 72,
+          "Hashrate": "13.63 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 263,
+          "Name": "4ea9ecfd7f6f",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 83,
+          "Hashrate": "13.59 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 265,
+          "Name": "50f417572987",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 70,
+          "Hashrate": "13.65 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 249,
+          "Name": "5626a383f033",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 76,
+          "Hashrate": "13.59 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 241,
+          "Name": "5ce7b55b3de1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 84,
+          "Hashrate": "13.76 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 56,
+          "Name": "ANAPA",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 51,
+          "Hashrate": "165.98 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 177,
+          "Name": "Antminer_1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 75,
+          "Hashrate": "13.77 TH",
+          "Coin": "BTC"
+        },
+        {
+          "RigID": 51,
+          "Name": "vans1",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 49,
+          "Hashrate": "165.51 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 49,
+          "Name": "vans10",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 48,
+          "Hashrate": "166.26 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 16,
+          "Name": "vans11",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 44,
+          "Hashrate": "166.16 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 44,
+          "Name": "vans12",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 50,
+          "Hashrate": "165.15 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 39,
+          "Name": "vans13",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 51,
+          "Hashrate": "166.14 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 37,
+          "Name": "vans14",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 48,
+          "Hashrate": "165.73 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 36,
+          "Name": "vans15",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 49,
+          "Hashrate": "166.24 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 38,
+          "Name": "vans16",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 48,
+          "Hashrate": "165.64 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 35,
+          "Name": "vans17",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 52,
+          "Hashrate": "165.75 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 34,
+          "Name": "vans18",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 51,
+          "Hashrate": "166.02 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 45,
+          "Name": "vans19",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 50,
+          "Hashrate": "166.35 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 50,
+          "Name": "vans2",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 50,
+          "Hashrate": "166.23 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 41,
+          "Name": "vans20",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 49,
+          "Hashrate": "163.07 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 40,
+          "Name": "vans21",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 52,
+          "Hashrate": "166.02 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 43,
+          "Name": "vans22",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 50,
+          "Hashrate": "165.55 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 42,
+          "Name": "vans23",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 47,
+          "Hashrate": "166.12 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 48,
+          "Name": "vans3",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 48,
+          "Hashrate": "166.03 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 47,
+          "Name": "vans4",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 47,
+          "Hashrate": "166.3 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 46,
+          "Name": "vans5",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 48,
+          "Hashrate": "166.16 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 20,
+          "Name": "vans6",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 44,
+          "Hashrate": "138.55 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 21,
+          "Name": "vans7",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 38,
+          "Hashrate": "166.37 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 19,
+          "Name": "vans8",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 45,
+          "Hashrate": "166.24 MH",
+          "Coin": "ETH"
+        },
+        {
+          "RigID": 18,
+          "Name": "vans9",
+          "StateStr": "MINING",
+          "RunMode": null,
+          "MaxTemp": 42,
+          "Hashrate": "160.25 MH",
+          "Coin": "ETH"
+        }
+      ]
+    }
+  ]
+}
