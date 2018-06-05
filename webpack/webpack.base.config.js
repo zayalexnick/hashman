@@ -12,6 +12,7 @@ export default new Config().merge({
             '~/modules': path.resolve(__dirname, '..', 'src', 'modules'),
             '~/theme': path.resolve(__dirname, '..', 'src', 'theme'),
             '~/interfaces': path.resolve(__dirname, '..', 'src', 'interfaces'),
+            '~/components': path.resolve(__dirname, '..', 'src', 'components'),
         }
     },
     module: {
@@ -19,6 +20,11 @@ export default new Config().merge({
             {
                 test: /\.jsx?$/,
                 use: 'babel-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.(jpg|jpeg|svg|png|gif)/,
+                use: 'url-loader',
                 exclude: /node_modules/
             }
         ]

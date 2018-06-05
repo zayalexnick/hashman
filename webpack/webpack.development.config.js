@@ -15,7 +15,8 @@ export default new Config().extend('webpack/webpack.base.config.js').merge({
             '/api': {
                 target: 'http://gpu.intelicom.ru/api/react',
                 pathRewrite: { '^/api': '' },
-                secure: false
+                secure: false,
+                changeOrigin: true
             }
         },
         historyApiFallback: true,

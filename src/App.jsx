@@ -16,6 +16,15 @@ injectGlobal`
     font-family: 'Roboto', Arial, sans-serif;
     line-height: 1;
   }
+  
+  button, select, textarea, input {
+    font-family: 'Roboto', Arial, sans-serif;
+    outline: none;
+  }
+  
+  button, input[type=submit] {
+    cursor: pointer;
+  }
 `;
 
 import Root from '~/scenes/Root';

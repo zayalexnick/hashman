@@ -38,3 +38,26 @@ export const signin = ({ login, password }: State) => {
         dispatch(authRecieved());
     }
 };
+
+export const checkAuth = () => {
+    return async (dispatch) => {
+        dispatch(authRequested());
+
+        try
+        {
+            const response = await axios.post('/api/auth');
+            const result: IResult = response.data;
+
+            if (result.ErrorCode < 0)
+                dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
+            else
+                dispatch(authSuccessed(result.Data));
+        }
+        catch (e)
+        {
+            console.log(e);
+        }
+
+        dispatch(authRecieved());
+    }
+}
