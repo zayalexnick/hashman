@@ -9,3 +9,10 @@ export const sidebar = '#2d3446';
 export const navlink = '#788195';
 export const black = '#000000';
 export const bg = '#f1f3f6';
+
+export const defaultColors = {
+    0: '#939393',
+    1: '#87d068',
+    2: '#ffae22',
+    3: '#f50'
+};

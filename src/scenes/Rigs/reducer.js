@@ -14,13 +14,13 @@ const initialState: State = {
         code: 0,
         message: ''
     },
-    data: []
+    data: {}
 };
 
 const reducer = createReducer({
     [actions.rigsRequested]: (state) => ({ ...state, loading: true }),
     [actions.rigsReceived]: (state) => ({ ...state, loading: false }),
-    [actions.rigsSuccessed]: (state, payload) => ({ ...state, data: payload.data }),
+    [actions.rigsSuccessed]: (state, payload) => ({ ...state, data: {...state.data, [payload.server]: payload.data[0].Rigs } }),
     [actions.rigsFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } })
 }, initialState);
 

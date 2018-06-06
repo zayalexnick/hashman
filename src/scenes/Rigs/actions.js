@@ -30,18 +30,19 @@ type ServerFormated = {
     rigs: Array<RigFormated>
 }
 
-export const getRigs = () => {
+export const getRigs = (server) => {
     return async (dispatch) => {
         dispatch(rigsRequested());
 
         try
         {
-            const response = await api.get('/api/react_rigs');
+            console.log(`/rigs/${server}`);
+            const response = await api.get(`/api/rigs/${server}`);
             const result: IResult = response.data;
 
             if (result.ErrorCode < 0) dispatch(rigsFailed({ code: result.ErrorCode, message: result.ErrorString }));
             else {
-                dispatch(rigsSuccessed({ data: result.Data }));
+                dispatch(rigsSuccessed({ data: result.Data, server }));
             }
         }
         catch(e)

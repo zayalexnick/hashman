@@ -37,3 +37,9 @@ export const IconLink = styled(Link)`
     text-decoration: none
     ${props => props.toggle ? 'margin-right: auto' : ''}
 `;
+
+export const User = styled.div`
+  margin-right: 20px;
+  font-size: 16px;
+  font-weight: 700;
+`;

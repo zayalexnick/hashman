@@ -9,11 +9,11 @@ export default new Config().extend('webpack/webpack.base.config.js').merge({
     devtool: 'inline-source-map',
     devServer: {
         contentBase: path.resolve(__dirname, '..', 'build'),
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 1000,
         proxy: {
             '/api': {
-                target: 'http://cp.gpuserver.ru',
+                target: 'http://gpu.intelicom.ru/api/react',
                 pathRewrite: { '^/api': '' },
                 changeOrigin: true
             }

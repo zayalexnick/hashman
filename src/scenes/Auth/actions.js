@@ -16,14 +16,17 @@ export const login = (data: Login) => {
 
         try
         {
-            const response = await api.post('/api/react_auth', data);
+            const response = await api.post('/api/auth', data);
             const result: IResult = response.data;
 
+            console.log(result);
+
             if (result.ErrorCode < 0) dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
-            else dispatch(authSuccessed());
+            else dispatch(authSuccessed(result.Data || { login: null, FullName: null }));
         }
         catch(e)
         {
+            console.log(e);
             dispatch(authFailed({ code: -100, message: 'Ошибка сервера' }))
         }
 
@@ -35,7 +38,7 @@ export const logout = () => {
     return async (dispatch) => {
         try
         {
-            await api.get('/api/react_logoff');
+            await api.get('/api/logoff');
             dispatch(authLogouted());
         }
         catch (e)
@@ -48,7 +51,7 @@ export const logout = () => {
 export const checkAuth = async () => {
     try
     {
-        const response = await api.post('/api/react_auth');
+        const response = await api.post('/api/auth');
         const result: IResult = response.data;
         console.log(result);
 

@@ -33,7 +33,7 @@ export const Menu = styled.div`
     padding: 35px 0;
 `;
 
-export const MenuItem = styled(NavLink)`
+export const MenuItem = styled(Link)`
     display: flex;
     align-items: center;
     padding: 12px 24px;

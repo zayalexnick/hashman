@@ -1,99 +1,114 @@
 import React, { Component } from 'react';
 import Content from 'components/Content';
 import Scrollbars from 'react-custom-scrollbars';
-import { Tabs, Table } from 'antd';
+import { Tabs, Switch, Form as FormA, Tag } from 'antd';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import * as actionsRigs from './actions';
+import * as actionsServers from 'scenes/Servers/actions';
 import { Loader, LoaderWrapper } from "components/Loader";
+import RigsTable from './RigsTable';
+import * as Colors from 'constants/Colors';
 
 @connect((state) => ({
-    rigs: state.rigs
-}), actions)
+    rigs: state.rigs,
+    servers: state.servers
+}), actionsServers)
 export default class Rigs extends Component
 {
     state = {
-        columns: [
-            {
-                title: 'ID',
-                dataIndex: 'RigID',
-                key: 'RigID',
-                visible: false,
-                sorter: (a, b) => a.RigID - b.RigID
-            },
-            {
-                title: 'Имя',
-                dataIndex: 'Name',
-                key: 'Name',
-                visible: true,
-                sorter: (a, b) => a.Name - b.Name
-            },
-            {
-                title: 'Статус',
-                dataIndex: 'StateStr',
-                key: 'StateStr',
-                visible: true,
-                sorter: (a, b) => a.StateStr.length - b.StateStr.length,
-                filters: [
-                    { text: 'MINING', value: 'MINING' },
-                    { text: 'IDDLE', value: 'IDDLE' },
-                ],
-                onFilter: (value, record) => {
-                    console.log(value, record.StateStr, value === record.StateStr);
-
-                    return record.StateStr === value
-                }
-            },
-            {
-                title: 'Режим',
-                dataIndex: 'RunMode',
-                key: 'RunMode',
-                visible: false,
-                sorter: (a, b) => a.RunMode.length - b.RunMode.length,
-            },
-            {
-                title: 'Максимальная температура',
-                dataIndex: 'MaxTemp',
-                key: 'MaxTemp',
-                visible: true,
-                sorter: (a, b) => a - b,
-            },
-            {
-                title: 'Хэшрейт',
-                dataIndex: 'Hashrate',
-                key: 'Hashrate',
-                visible: true,
-                sorter: (a, b) => a.Hashrate.length - b.Hashrate.length,
-            },
-            {
-                title: 'Коин',
-                dataIndex: 'Coin',
-                key: 'Coin',
-                visible: false,
-                sorter: (a, b) => a.Coin.length - b.Coin.length,
-            },
-        ]
+        update: null,
+        current: null
     };
 
     componentDidMount()
     {
-        this.props.getRigs();
+        this.props.getServers();
 
-        setTimeout(() => this.props.getRigs(), 10000);
+        this.setState({ update: setInterval(() => this.props.getServers(this.props.server), 5000) });
     }
+
+    componentWillUnmount()
+    {
+        clearInterval(this.state.update);
+    }
+
+    onClickHandler = (current) =>
+    {
+        this.setState({ current });
+        console.log(current);
+    };
+
+    renderTab = (server) => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <span style={{ marginRight: '8px' }}>{server.ServerName}</span>
+                <div style={{
+                    lineHeight: '20px',
+                    height: '22px',
+                    padding: '0 7px',
+                    borderRadius: '4px 0 0 4px',
+                    background: Colors.defaultColors[1],
+                    fontSize: '12px',
+                    color: Colors.white
+                }}>{ server.RigsOnline }</div>
+                <div style={{
+                    lineHeight: '20px',
+                    height: '22px',
+                    padding: '0 7px',
+                    background: Colors.defaultColors[2],
+                    fontSize: '12px',
+                    color: Colors.white
+                }}>{ server.RigsWarning }</div>
+                <div style={{
+                    lineHeight: '20px',
+                    height: '22px',
+                    padding: '0 7px',
+                    borderRadius: '0 4px 4px 0',
+                    background: Colors.defaultColors[3],
+                    fontSize: '12px',
+                    color: Colors.white
+                }}>{ server.RigsOffline }</div>
+            </div>
+        );
+    };
+
+    getServer = (id) => {
+        this.props.servers.data.map((server) => {
+            console.log(id, server, id === server.ServerID);
+            if (id === server.ServerID) return server;
+        });
+
+        return null;
+    };
+
+    renderTable = (current, server) => {
+        console.log(server);
+        if (current === null && typeof this.props.match.params.server === 'undefined')
+            return <RigsTable serverData={this.props.servers.data[0]} server={this.props.servers.data[0].ServerID} />;
+
+        if (current == server.ServerID)
+            return <RigsTable serverData={server} server={server.ServerID} />;
+
+        if (typeof this.props.match.params.server !== 'undefined')
+            return <RigsTable serverData={this.getServer(this.props.match.params.server)} server={this.props.match.params.server} />;
+
+        return null;
+    };
 
     render()
     {
-        console.log(this.props.rigs.data.length);
 
         return (
-            <Content loading={this.props.rigs.data.length === 0}>
+            <Content loading={this.props.servers.data.length === 0}>
                 <Scrollbars>
-                    <Tabs>
-                        {this.props.rigs.data.map((server, index) => (
-                            <Tabs.TabPane key={index} tab={server.ServerName}>
-                                <Table dataSource={server.Rigs} columns={this.state.columns.filter((column) => column.visible)} />
-                            </Tabs.TabPane>
-                        ))}
+                    <Tabs defaultActiveKey={this.props.match.params.server} onChange={this.onClickHandler}>
+                        {
+                            this.props.servers.data.map((server, index) => (
+                                <Tabs.TabPane key={server.ServerID} tab={this.renderTab(server)}>
+                                    {this.renderTable(this.state.current, server)}
+                                </Tabs.TabPane>
+                            ))
+                        }
                     </Tabs>
                 </Scrollbars>
             </Content>

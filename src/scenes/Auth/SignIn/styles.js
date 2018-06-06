@@ -12,10 +12,10 @@ export const SignInStyleWrapper = styled.div`
   justify-content: flex-end;
   align-items: center;
   position: relative;
-  background: url(${bgImage}) no-repeat center center;
+  background: ${Colors.bg};
   background-size: cover;
 
-  &:before {
+  /*&:before {
     content: '';
     width: 100%;
     height: 100%;
@@ -26,7 +26,7 @@ export const SignInStyleWrapper = styled.div`
     top: 0;
     left: inherit;
     right: 0;
-  }
+  }*/
 `;
 
 export const LoginContentWrapper = styled.div`

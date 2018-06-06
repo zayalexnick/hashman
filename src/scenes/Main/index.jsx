@@ -6,6 +6,8 @@ import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from 'scenes/Auth/actions';
 import Rigs from 'scenes/Rigs';
+import Servers from 'scenes/Servers';
+import Events from 'scenes/Events';
 import { Loader, LoaderWrapper } from "components/Loader";
 
 @connect((state) => ({
@@ -36,7 +38,10 @@ export default class Main extends Component
                     <Sidebar />
                     <Topbar />
                     <Content>
-                        <Route path="/rigs" component={Rigs} />
+                        <Route exact path="/rigs" component={Rigs} />
+                        <Route exact path="/rigs/:server" component={Rigs} />
+                        <Route exact path="/events" component={Events} />
+                        <Route path="/servers" component={Servers} />
                     </Content>
                 </Layout>
             </main>

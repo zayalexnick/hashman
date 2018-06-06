@@ -42,7 +42,6 @@ export const Form = styled(FormA)`
     
     .ant-row.ant-form-item {
       margin-right: 0;
-      justify-content: flex-start;
     }
     
     .ant-form-item-control-wrapper {
