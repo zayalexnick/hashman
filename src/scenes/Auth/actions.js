@@ -22,7 +22,11 @@ export const login = (data: Login) => {
             console.log(result);
 
             if (result.ErrorCode < 0) dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
-            else dispatch(authSuccessed(result.Data || { login: null, FullName: null }));
+            else {
+                localStorage.setItem('token', result.Data.XAuth);
+                api.defaults.headers.common['XAuth'] = localStorage.getItem('token');
+                dispatch(authSuccessed(result.Data || { login: null, FullName: null }));
+            }
         }
         catch(e)
         {
@@ -39,6 +43,7 @@ export const logout = () => {
         try
         {
             await api.get('/api/logoff');
+            localStorage.removeItem('token');
             dispatch(authLogouted());
         }
         catch (e)
@@ -48,19 +53,17 @@ export const logout = () => {
     }
 };
 
-export const checkAuth = async () => {
-    try
-    {
-        const response = await api.post('/api/auth');
-        const result: IResult = response.data;
-        console.log(result);
+export const checkAuth = () => {
+    return async (dispatch) => {
+        try {
+            const response = await api.get('/api/auth');
+            const result: IResult = response.data;
 
-        if (result.ErrorCode < 0) return false;
-
-        return true;
-    }
-    catch (e)
-    {
-        console.log(e);
+            if (result.ErrorCode === 2)
+                dispatch(authSuccessed(result.Data || {login: null, FullName: null}));
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
 };

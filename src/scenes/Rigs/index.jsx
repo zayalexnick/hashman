@@ -73,16 +73,17 @@ export default class Rigs extends Component
     };
 
     getServer = (id) => {
+        let serv = null;
         this.props.servers.data.map((server) => {
-            console.log(id, server, id === server.ServerID);
-            if (id === server.ServerID) return server;
+            console.log(id, server.ServerID, server, id == server.ServerID);
+            if (id == server.ServerID) { console.log('Yeah'); serv = server; }
         });
 
-        return null;
+        return serv;
     };
 
     renderTable = (current, server) => {
-        console.log(server);
+        console.log('Server', this.getServer(this.props.match.params.server), this.props.match.params.server);
         if (current === null && typeof this.props.match.params.server === 'undefined')
             return <RigsTable serverData={this.props.servers.data[0]} server={this.props.servers.data[0].ServerID} />;
 

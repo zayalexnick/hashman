@@ -20,7 +20,7 @@ export default class SignIn extends Component<null, Login>
 
     componentDidMount()
     {
-        this.props.login();
+        this.props.checkAuth();
     }
 
     loginHandler = () => {

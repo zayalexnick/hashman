@@ -12,7 +12,5 @@ export default (hashrate) => {
         i++;
     }
 
-    hashrate = (hashrate === 0) ? 1 : hashrate;
-
-    return `${hashrate.toFixed(2)} ${power[i]}/s`;
+    return (hashrate === 0) ? 0 : `${parseFloat(hashrate).toFixed(2)} ${power[i]}/s`;
 }

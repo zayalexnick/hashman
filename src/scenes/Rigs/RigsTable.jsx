@@ -185,7 +185,7 @@ export default class RigsTable extends Component
 
     render()
     {
-        console.log(this.props.serverData);
+        console.log(this.props);
         return (
             <div>
                 <Row>
