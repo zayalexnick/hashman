@@ -20,7 +20,8 @@ const initialState = {
     pending: {
         loading: false
     },
-    entities: []
+    entities: [],
+    charts: {}
 };
 
 const reducer = createReducer({
@@ -28,6 +29,7 @@ const reducer = createReducer({
     [actions.serversReceived]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
     [actions.serversFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
     [actions.serversSuccessed]: (state, payload) => ({ ...state, entities: payload }),
+    [actions.serversCharts]: (state, payload) => ({ ...state, charts: payload }),
 }, initialState);
 
 export default reducer;

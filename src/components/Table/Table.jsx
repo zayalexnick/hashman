@@ -12,8 +12,10 @@ export default class extends Component
         this.state = {
             columns: this.props.columns,
             dataSource: this.props.dataSource,
-            sorterColumn: null
-        }
+            sorterColumn: null,
+            sorterOrder: null,
+            sorterFunc: null
+        };
     }
 
     componentWillReceiveProps()
@@ -22,17 +24,33 @@ export default class extends Component
             columns: this.props.columns,
             dataSource: this.props.dataSource,
         });
+
+        if (this.state.sorterColumn !== null) this.applySorting();
     }
+
+    applySorting = () => {
+        this.setState((prevState) => ({
+            dataSource: [ ...prevState.dataSource.sort(prevState.sorterFunc) ]
+        }));
+
+        if (this.state.sorterOrder === 'desc')
+            this.setState((prevState) => ({
+                dataSource: [ ...prevState.dataSource.reverse() ]
+            }));
+    };
 
     compareBy = (column, compareFunc) => {
         if (this.state.sorterColumn === column)
             this.setState((prevState) => ({
-                dataSource: [ ...prevState.dataSource.reverse() ]
+                dataSource: [ ...prevState.dataSource.reverse() ],
+                sorterOrder: prevState.sorterOrder === 'asc' ? 'desc' : 'asc'
             }));
         else
             this.setState((prevState) => ({
                 dataSource: [ ...prevState.dataSource.sort(compareFunc) ],
-                sorterColumn: column
+                sorterColumn: column,
+                sorterFunc: compareFunc,
+                sorterOrder: 'asc'
             }));
     };
 

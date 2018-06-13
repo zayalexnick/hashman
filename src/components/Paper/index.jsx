@@ -1,9 +1,14 @@
 import React from 'react';
-import { Container, Title } from "./styles";
+import { Container, Title, Subes } from "./styles";
 
-export default ({ title, children }) => (
+export default ({ title, subes, type, children }) => (
     <Container>
-        { title ? <Title>{title}</Title> : null }
+        { title ? <Title type={type}>{title}</Title> : null }
+        { subes ? (
+            <Subes>
+                { subes.map((sub, index) => sub) }
+            </Subes>
+        ) : null }
         { children }
     </Container>
 );
