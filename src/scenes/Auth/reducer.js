@@ -26,7 +26,6 @@ const initialState: IinitialState = {
         loading: false
     },
     entities: {
-        authorized: false,
         login: null,
         fullname: null
     }
@@ -37,6 +36,7 @@ const reducer = createReducer({
     [actions.authRecieved]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
     [actions.authFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message }, entities: { ...state.entities, authorized: false } }),
     [actions.authSuccessed]: (state, payload) => ({ ...state, entities: { ...state.entities, authorized: true, login: payload.login, fullname: payload.FullName } }),
+    [actions.authLogouted]: () => initialState,
 }, initialState);
 
 export default reducer;

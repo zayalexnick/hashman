@@ -2,7 +2,7 @@
     @flow
  */
 
-import axios from 'axios';
+import api from '~/api';
 import { createAction } from 'redux-act';
 import IResult from '~/interfaces/IResult';
 
@@ -10,54 +10,52 @@ export const authRequested = createAction('[AUTH] Requested');
 export const authRecieved = createAction('[AUTH] Received');
 export const authSuccessed = createAction('[AUTH] Successed');
 export const authFailed = createAction('[AUTH] Failed');
+export const authLogouted = createAction('[AUTH] Logouted');
 
-type State = {
-    login: string,
-    password: string
-};
-
-export const signin = ({ login, password }: State) => {
-    return async (dispatch) => {
+export const signin = ({ login, password }) => async (dispatch) => {
+    try
+    {
         dispatch(authRequested());
 
-        try
-        {
-            const response = await axios.post('/api/auth', { login, password });
-            const result: IResult = response.data;
+        const { data }: { data:IResult } = await api.post('/api/auth', { login, password });
 
-            if (result.ErrorCode < 0)
-                dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
-            else
-                dispatch(authSuccessed(result.Data));
-        }
-        catch (e)
+        if (data.ErrorCode < 0)
+            dispatch(authFailed({ code: data.ErrorCode, message: data.ErrorString }));
+        else
         {
-            console.log(e);
+            localStorage.setItem('token', data.Data.XAuth);
+            api.defaults.headers['XAuth'] = data.Data.XAuth;
+            dispatch(authSuccessed(data.Data));
         }
-
+    }
+    catch (e)
+    {
+        dispatch(authFailed({ code: null, message: e }));
+    }
+    finally {
         dispatch(authRecieved());
     }
 };
 
-export const checkAuth = () => {
-    return async (dispatch) => {
-        dispatch(authRequested());
+export const checkAuth = () => async (dispatch) => {
+    try
+    {
+        const { data }: { data:IResult } = await api.get('/api/auth');
 
-        try
-        {
-            const response = await axios.post('/api/auth');
-            const result: IResult = response.data;
-
-            if (result.ErrorCode < 0)
-                dispatch(authFailed({ code: result.ErrorCode, message: result.ErrorString }));
-            else
-                dispatch(authSuccessed(result.Data));
-        }
-        catch (e)
-        {
-            console.log(e);
-        }
-
+        if (data.ErrorCode < 0)
+            dispatch(authFailed({ code: data.ErrorCode, message: data.ErrorString }));
+        else
+            dispatch(authSuccessed(data.Data));
+    }
+    catch (e)
+    {
+        dispatch(authFailed({ code: null, message: e }));
+    }
+    finally {
         dispatch(authRecieved());
     }
-}
+};
+
+export const logout = () => async (dispatch) => {
+    await api.get('/api/logoff');
+};

@@ -8,11 +8,7 @@ export default new Config().merge({
     resolve: {
         extensions: ['.jsx', '.js'],
         alias: {
-            '~/scenes': path.resolve(__dirname, '..', 'src', 'scenes'),
-            '~/modules': path.resolve(__dirname, '..', 'src', 'modules'),
-            '~/theme': path.resolve(__dirname, '..', 'src', 'theme'),
-            '~/interfaces': path.resolve(__dirname, '..', 'src', 'interfaces'),
-            '~/components': path.resolve(__dirname, '..', 'src', 'components'),
+            '~': path.resolve(__dirname, '..', 'src'),
         }
     },
     module: {

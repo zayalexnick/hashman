@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { hot } from 'react-hot-loader';
 
 type Props = {
-
+    fullname: string,
+    logout: () => {}
 };
 
 @hot(module)
@@ -14,8 +15,8 @@ export default class extends Component<Props>
     {
         return (
             <AccountPanel.Wrapper>
-                <AccountPanel.Username>Зайка А.Н.</AccountPanel.Username>
-                <AccountPanel.Logout />
+                <AccountPanel.Username>{ this.props.fullname }</AccountPanel.Username>
+                <AccountPanel.Logout onClick={this.props.logout} />
             </AccountPanel.Wrapper>
         );
     }

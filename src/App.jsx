@@ -15,6 +15,7 @@ injectGlobal`
   body {
     font-family: 'Roboto', Arial, sans-serif;
     line-height: 1;
+    overflow-x: hidden;
   }
   
   button, select, textarea, input {
@@ -24,6 +25,10 @@ injectGlobal`
   
   button, input[type=submit] {
     cursor: pointer;
+  }
+  
+  main {
+    overflow-x: hidden;
   }
 `;
 

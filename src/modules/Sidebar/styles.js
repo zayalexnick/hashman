@@ -11,17 +11,17 @@ export const Wrapper = styled.aside`
   display: flex;
   flex-direction: column;
   
-  width: ${ props => !props.hidden ? '240px' : '0' };
+  width: ${ props => props.type === 'big' ? '240px' : '0' };
   ${ props => transitions(`width ${props.theme.variables.animation.speed}`) };
     
   background: ${ props => props.theme.colors.sidebar.bg };
   
-  z-index: 5;
+  z-index: 20;
   
   overflow: hidden;
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.sm }) {
-    width: ${ props => !props.hidden ? '240px' : '80px' };
+    width: ${ props => props.type === 'big' ? '240px' : '80px' };
   }
 `;
 
@@ -59,11 +59,10 @@ export const Content = styled.nav`
 
 export const Link = styled(NavLink)`
   display: flex;
-  
+  justify-content: ${ props => props.type === 'big' ? 'flex-start' : 'center' };
   align-items: center;
 
   padding: 12px 24px;
-  justify-content: ${ props => !props.hidden ? 'flex-start' : 'center' };
   text-decoration: none;
   
   color: ${ props => props.theme.colors.sidebar.link };
@@ -81,11 +80,11 @@ export const Link = styled(NavLink)`
 export const Icon = styled.span`
   display: flex;
   
-  margin-right: ${ props => !props.hidden ? '20px' : 0 };
+  margin-right: ${ props => props.type === 'big' ? '20px' : 0 };
   
   font-size: ${ rem('24px') };
 `;
 
 export const Label = styled.span`
-  display: ${ props => !props.hidden ? 'flex' : 'none' };
+  display: ${ props => props.type === 'big' ? 'flex' : 'none' };
 `;

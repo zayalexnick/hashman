@@ -6,7 +6,8 @@ import * as Topbar from './styles';
 import AccountPanel from '~/modules/AccountPanel';
 
 type Props = {
-
+    fullname: string,
+    logout: () => {}
 };
 
 @connect((state) => ({
@@ -22,7 +23,7 @@ export default class extends Component<Props>
         return (
             <Topbar.Wrapper hidden={hidden}>
                 <Topbar.Toggle onClick={toggleSidebar} />
-                <AccountPanel />
+                <AccountPanel logout={this.props.logout} fullname={this.props.fullname} />
             </Topbar.Wrapper>
         );
     }

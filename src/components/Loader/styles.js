@@ -25,7 +25,7 @@ export const Loader = styled.div`
   justify-content: center;
   align-items: center;
   
-  background: ${ props => transparentize(0.3, props.theme.colors.base.white) };
+  background: ${ props => props.transparent ? transparentize(0.3, props.theme.colors.base.white) : props.theme.colors.base.white };
   
   z-index: 10;
   

@@ -8,13 +8,11 @@ import SignInScene from './SignIn';
 
 import { Wrapper, Content, Logo } from "./styles";
 
-type Props = {};
-
 @hot(module)
 @connect((state) => ({
     auth: state.auth
 }), actions)
-export default class extends Component<Props>
+export default class extends Component
 {
     componentDidMount()
     {
