@@ -10,6 +10,8 @@ export const Title = styled.h2`
 `;
 
 export const Container = styled.div`
+  height: calc(100% - 20px);
+
   margin-bottom: 20px;
   padding: 20px;
   

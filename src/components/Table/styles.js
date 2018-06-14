@@ -1,10 +1,79 @@
 import styled from 'styled-components';
 import { rgba, rem, transitions } from 'polished';
 import SorterIcon from 'react-icons/lib/fa/sort';
+import IconFilter from 'react-icons/lib/fa/filter';
 
 export const Container = styled.div`
   width: 100%;
   overflow-x: auto;
+  
+  .pagination {
+    display: flex;
+    justify-content: flex-start;
+    
+    margin-top: 20px;
+    
+    list-style: none;
+    
+    @media screen and (min-width: ${ props => props.theme.variables.breakpoints.md })
+    {
+      justify-content: flex-end;
+    }
+    
+    li {
+      display: flex;
+    
+      margin: 0 5px;
+      
+      &:first-child {
+        margin-left: 0;
+      }
+      
+      &:last-child {
+        margin-right: 0;
+      }
+      
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        min-width: 30px;
+        height: 30px;
+        
+        font-size: ${ rem('12px') };
+        font-weight: 500;
+        color: ${ props => rgba(props.theme.colors.base.black, 0.4) };
+        
+        border-radius: 4px;
+        border: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.4) };
+        
+        outline: none;
+        cursor: pointer;
+        
+        ${ props => transitions(`color ${ props.theme.variables.animation.speed }`, `border-color ${ props.theme.variables.animation.speed }`) }
+        
+        &:hover {
+          color: ${ props => props.theme.notifications.primary };
+          border-color: ${ props => props.theme.notifications.primary };
+        }
+      }
+      
+      &.active a {
+        color: ${ props => props.theme.notifications.primary };
+        border-color: ${ props => props.theme.notifications.primary };
+      }
+      
+      &.disabled a {
+        color: ${ props => rgba(props.theme.colors.base.black, 0.1) };
+        border-color: ${ props => rgba(props.theme.colors.base.black, 0.1) };
+      }
+      
+      &.break a {
+        border: 0;
+      }
+    }
+  }
 `;
 
 export const Table = styled.table`
@@ -38,6 +107,8 @@ export const Column = styled.td`
   
   border-bottom: 1px solid ${ props => props.theme.table.colors.border };
   
+  ${ props => props.styles };
+  
   span {
     margin-right: 5px;
   }
@@ -68,4 +139,24 @@ export const Sorter = styled(SorterIcon)`
   &:hover {
     color: ${ props => props.active === "true" ? props.theme.table.colors.active : props.theme.colors.base.dark };
   }
+`;
+
+export const Filter = styled.span`
+  position: relative;
+`;
+
+export const FilterIcon = styled(IconFilter)`
+
+`;
+
+export const FilterModal = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  
+  display: ${ props => props.opened ? 'flex' : 'none' };
+  
+  padding: 10px;
+  
+  background: ${ props => props.theme.colors.base.white };
 `;

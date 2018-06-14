@@ -1,7 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import moment from 'moment';
 import { ThemeProvider, injectGlobal } from 'styled-components';
 import configureStore from './redux/confugureStore';
+
+moment.locale('ru');
 
 import theme from '~/theme';
 

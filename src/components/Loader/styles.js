@@ -12,6 +12,8 @@ const animate = keyframes`
 
 export const Wrapper = styled.div`
   position: relative;
+  
+  height: 100%;
 `;
 
 export const Loader = styled.div`
@@ -25,7 +27,7 @@ export const Loader = styled.div`
   justify-content: center;
   align-items: center;
   
-  background: ${ props => props.transparent ? transparentize(0.3, props.theme.colors.base.white) : props.theme.colors.base.white };
+  background: ${ props => props.transparent ? transparentize(props.transparent, props.theme.colors.base.white) : props.theme.colors.base.white };
   
   z-index: 10;
   

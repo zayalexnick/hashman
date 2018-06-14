@@ -2,6 +2,8 @@ import colors from './colors';
 import variables from './variables';
 import table from './table';
 
+// TODO Сделать theme
+
 export default {
     colors,
     variables,

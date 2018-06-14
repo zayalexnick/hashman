@@ -10,7 +10,7 @@ export default new Config().extend('webpack/webpack.base.config.js').merge({
     devServer: {
         contentBase: path.resolve(__dirname, '..', 'dist'),
         host: '0.0.0.0',
-        port: 2000,
+        port: 1000,
         proxy: {
             '/api': {
                 target: 'http://gpu.intelicom.ru/api/react',

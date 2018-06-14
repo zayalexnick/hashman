@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Navigation, NavItem } from './styles';
+import { Tabs, Navigation, NavItem, Content } from './styles';
 
 export default class extends Component
 {
@@ -9,12 +9,14 @@ export default class extends Component
 
     componentDidMount()
     {
-        this.setState({ current: this.props.items[0].index })
+        this.setState({ current: parseInt(this.props.activeItem) || this.props.items[0].index });
     }
 
     clickHandler = (index) => {
         this.setState({ current: index });
     };
+
+    getCurrent = () => this.props.items.filter((item) => item.index === this.state.current)[0] || null;
 
     render()
     {
@@ -25,6 +27,9 @@ export default class extends Component
                 <Navigation>
                     { items.map((item) => <NavItem key={item.index} active={this.state.current === item.index} onClick={() => this.clickHandler(item.index)}>{ item.label }</NavItem>) }
                 </Navigation>
+                <Content>
+                    { this.getCurrent() ? this.getCurrent().content : null }
+                </Content>
             </Tabs>
         );
     }

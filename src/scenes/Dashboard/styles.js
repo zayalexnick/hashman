@@ -7,7 +7,7 @@ export const Container = styled.div`
     min-width: 320px;
     min-height: 100vh;
 
-    padding-top: 70px;
+    padding-top: 50px;
     margin-left: ${ props => !props.hidden ? '80' : '0' };
     
     ${ props => transitions(`margin-left ${ props.theme.variables.animation.speed }`) };

@@ -11,7 +11,7 @@ type State = {
 }
 
 const initialState: State = {
-    hidden: true,
+    hidden: window.innerWidth < 480,
     hovered: false
 };
 

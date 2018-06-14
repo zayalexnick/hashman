@@ -10,6 +10,8 @@ import Topbar from '~/modules/Topbar';
 
 import ServersScreen from '~/scenes/Servers';
 import RigsScreen from '~/scenes/Rigs';
+import EventsScreen from '~/scenes/Events';
+import IncomeScreen from '~/scenes/Income';
 
 import navigation from '~/navigation';
 
@@ -50,8 +52,11 @@ export default class extends Component<Props>
                 <Container hidden={hidden}>
                     <Content>
                         <Switch>
-                            <Route exact path={`/rigs`} component={RigsScreen} />
                             <Route exact path={`/servers`} component={ServersScreen} />
+                            <Route exact path={`/events`} component={EventsScreen} />
+                            <Route exact path={`/rigs/:id`} component={RigsScreen} />
+                            <Route exact path={`/rigs`} component={RigsScreen} />
+                            <Route exact path={`/income`} component={IncomeScreen} />
                         </Switch>
                     </Content>
                 </Container>

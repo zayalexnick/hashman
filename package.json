@@ -29,10 +29,13 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
     "polished": "^1.9.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-icons": "^2.2.7",
+    "react-paginate": "^5.2.3",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "recharts": "^1.0.0-beta.10",

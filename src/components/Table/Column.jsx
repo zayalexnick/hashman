@@ -8,10 +8,19 @@ export default class extends Component
         compare: (a, b) => a - b
     };
 
+    state = {
+
+    };
+
+    componentDidMount()
+    {
+        this.setState({ ...this.props.onRow(this.props.record) });
+    }
+
     render()
     {
         return (
-            <Column>{ this.props.render(this.props.record[this.props.index], this.props.record) }</Column>
+            <Column styles={this.state.styles}>{ this.props.render(this.props.record[this.props.index], this.props.record) }</Column>
         );
     }
 }

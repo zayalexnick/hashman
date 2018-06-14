@@ -6,6 +6,7 @@ import { Primary } from "~/components/Button";
 import { Form, Inline, Required } from '../styles';
 import { Input } from '~/components/Form';
 import Loader from '~/components/Loader';
+import Alert from '~/components/Alert';
 
 type Props = {};
 
@@ -27,10 +28,12 @@ export default class extends Component<Props>
     render()
     {
         const { loading } = this.props.auth.pending;
+        const { error } = this.props.auth;
 
         return (
-            <Loader loading={loading}>
+            <Loader loading={loading} style={{ height: 'auto' }} transparent={0.4}>
                 <Form>
+                    { error.code === -1 ? <Alert type="error">{ error.message }</Alert> : null }
                     <Input type="text" placeholder="Логин" onChange={(e) => this.setState({ login: e.target.value })} value={this.state.login} />
                     <Input type="password" placeholder="Пароль" onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
                     <Inline>

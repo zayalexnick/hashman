@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
   padding-left: ${ props => !props.hidden ? '260px' : '20px' }
   ${ props => transitions(`padding-left ${props.theme.variables.animation.speed}`) };
 
-  height: 70px;
+  height: 50px;
   
   background: ${ props => props.theme.colors.base.white };
   border-bottom: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.1) };

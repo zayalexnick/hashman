@@ -12,7 +12,7 @@ type State = {
     entities: Array<any>
 };
 
-const initialState = {
+const initialState: State = {
     error: {
         code: 0,
         message: ''
@@ -24,10 +24,11 @@ const initialState = {
 };
 
 const reducer = createReducer({
-    [actions.serversRequested]: (state) => ({ ...state, pending: { ...state.pending, loading: true } }),
-    [actions.serversReceived]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
-    [actions.serversFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
-    [actions.serversSuccessed]: (state, payload) => ({ ...state, entities: payload }),
+    [actions.rigsRequested]: (state) => ({ ...state, pending: { ...state.pending, loading: true } }),
+    [actions.rigsReceived]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
+    [actions.rigsFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
+    [actions.rigsSuccessed]: (state, payload) => ({ ...state, entities: payload }),
+    [actions.rigsClear]: (state) => ({ ...state, entities: [] }),
 }, initialState);
 
 export default reducer;

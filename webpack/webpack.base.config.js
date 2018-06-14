@@ -28,7 +28,7 @@ export default new Config().merge({
     plugins: [
         new HTMLPlugin({
             template: path.resolve(__dirname, '..', 'src', 'index.html'),
-            inject: 'body'
+            inject: false
         })
     ]
 });
