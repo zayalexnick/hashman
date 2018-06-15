@@ -146,7 +146,9 @@ export const Filter = styled.span`
 `;
 
 export const FilterIcon = styled(IconFilter)`
+  color: ${ props => props.active === "true" ? props.theme.table.colors.active : rgba(props.theme.colors.base.dark, 0.6) }; 
 
+  cursor: pointer;
 `;
 
 export const FilterModal = styled.div`

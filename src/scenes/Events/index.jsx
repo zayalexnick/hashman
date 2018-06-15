@@ -30,9 +30,19 @@ export default class extends Component
     }
 
     listenAll = () => {
-        this.props.events.entities.map((event, index) => {
+        this.props.events.entities.map((event) => {
             localStorage.setItem(`event-${event.EventID}`, true);
         })
+    };
+
+    unread = () => {
+        let i = 0;
+
+        this.props.events.entities.map((event) => {
+            if (!localStorage.getItem(`event-${event.EventID}`)) i++;
+        });
+
+        return i;
     };
 
     componentWillUnmount()
@@ -40,13 +50,13 @@ export default class extends Component
         clearInterval(this.state.update);
     }
 
-    render() // TODO Сделать показ количества непрочтенных
+    render()
     {
         const { events } = this.props;
 
         return (
             <div>
-                <Title>Уведомления</Title>
+                <Title sub={{ type: 'success', label: `(${this.unread()})` }}>Уведомления</Title>
                 <Paper title="Последние уведомления">
                     <LoaderContainer loading={events.entities.length === 0}>
                         <Table

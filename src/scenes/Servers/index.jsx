@@ -54,7 +54,6 @@ const TooltipHashrate = (props) => (
     <ToolTip.Container>
         { props.payload.length > 0 ? (
             <ToolTip.Content>
-                { console.log(props) }
                 <ToolTip.Date>{ moment(props.payload[0].payload.date).format('L LT') }</ToolTip.Date>
                 { props.payload.map((item, index) => (
                     <ToolTip.Item key={index} color={item.color}>
@@ -122,13 +121,15 @@ export default class extends Component
             RigsTotal: 0,
             RigsOnline: 0,
             RigsWarning: 0,
-            RigsOffline: 0
+            RigsError: 0,
+            RigsOffline: 0,
         };
 
         this.props.servers.entities.map((server) => {
             info.RigsTotal += server.RigsTotal;
             info.RigsOnline += server.RigsOnline;
             info.RigsWarning += server.RigsWarning;
+            info.RigsError += server.RigsError;
             info.RigsOffline += server.RigsOffline;
         });
 
@@ -162,7 +163,7 @@ export default class extends Component
                 <Row>
                     <Col xs={12} md={6} lg={3}>
                         <Paper title="Стабильность" loading={Object.keys(servers.charts).length === 0} subes={[
-                            <Tag type="default" key={1}>Всего: {this.getInfo().RigsTotal}</Tag>,
+                            <Tag type="primary" key={1}>Всего: {this.getInfo().RigsTotal}</Tag>,
                             <Tag type="success" key={2}>Онлайн: {this.getInfo().RigsOnline}</Tag>,
                             <Tag type="warning" key={3}>С ошибками: {this.getInfo().RigsWarning}</Tag>,
                             <Tag type="error" key={4}>Нерабочие: {this.getInfo().RigsOffline}</Tag>,
@@ -203,30 +204,6 @@ export default class extends Component
                         </Paper>
                     </Col>
                 </Row>
-                <Paper title="Прибыль">
-                    <LoaderContainer loading={servers.entities.length === 0}>
-                        <Table
-                            columns={[
-                                {
-                                    label: 'Coin',
-                                    index: 'coin'
-                                },
-                                {
-                                    label: 'Хэшрейт',
-                                    index: 'hashrate',
-                                    render: (value) => hashrate(value)
-                                },
-                                {
-                                    label: 'Прибыль',
-                                    index: 'income',
-                                    render: (value) => wallet(value)
-                                }
-                            ]}
-                            dataSource={this.getCoinsValue()}
-                            pagination={false}
-                        />
-                    </LoaderContainer>
-                </Paper>
                 <Paper title="Текущие фермы">
                     <LoaderContainer loading={servers.entities.length === 0}>
                         <Table
@@ -262,10 +239,11 @@ export default class extends Component
                                     index: 'RigsTotal',
                                     render: (value, record) => (
                                         <Group inline>
-                                            <Tag type="default">{ record.RigsTotal }</Tag>
+                                            <Tag type="primary">{ record.RigsTotal }</Tag>
                                             <Tag type="success">{ record.RigsOnline }</Tag>
                                             <Tag type="warning">{ record.RigsWarning }</Tag>
-                                            <Tag type="error">{ record.RigsOffline }</Tag>
+                                            <Tag type="error">{ record.RigsError }</Tag>
+                                            <Tag type="default">{ record.RigsOffline }</Tag>
                                         </Group>
                                     )
                                 },

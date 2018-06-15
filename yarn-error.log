@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js start:dev
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-icons-kit
 
 PATH: 
   D:\Cmder\bin;D:\Cmder\vendor\conemu-maximus5\ConEmu\Scripts;D:\Cmder\vendor\conemu-maximus5;D:\Cmder\vendor\conemu-maximus5\ConEmu;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\Git\cmd;C:\Program Files\TortoiseSVN\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\AMD\ATI.ACE\Core-Static;C:\Users\Alex\AppData\Local\Android\Sdk;C:\Users\Alex\AppData\Local\Android\Sdk\platform-tools;C:\Program Files (x86)\Yarn\bin\;D:\OpenServer\modules\phalcon-devtools\;D:\OpenServer\modules\php\PHP-7-x64\;C:\Users\alex2\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\alex2\AppData\Local\Android\Sdk\tools;C:\Users\alex2\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\Microsoft VS Code\bin;C:\Users\alex2\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\share\vim\vim74;D:\Cmder\
@@ -45,10 +45,13 @@ npm manifest:
     },
     "dependencies": {
       "axios": "^0.18.0",
+      "lodash": "^4.17.10",
+      "moment": "^2.22.2",
       "polished": "^1.9.2",
       "react": "^16.4.0",
       "react-dom": "^16.4.0",
       "react-icons": "^2.2.7",
+      "react-paginate": "^5.2.3",
       "react-redux": "^5.0.7",
       "react-router-dom": "^4.2.2",
       "recharts": "^1.0.0-beta.10",
@@ -3989,6 +3992,10 @@ Lockfile:
     dependencies:
       minimist "0.0.8"
   
+  moment@^2.22.2:
+    version "2.22.2"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+  
   move-concurrently@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -4802,6 +4809,12 @@ Lockfile:
   react-lifecycles-compat@^3.0.4:
     version "3.0.4"
     resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+  
+  react-paginate@^5.2.3:
+    version "5.2.3"
+    resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-5.2.3.tgz#1eea032f760a86736ad61fb64dab37a9e99fa351"
+    dependencies:
+      prop-types "^15.6.1"
   
   react-redux@^5.0.7:
     version "5.0.7"
@@ -6407,16 +6420,14 @@ Lockfile:
       yeoman-environment "^2.0.5"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 3221225786
-  Command: C:\Windows\system32\cmd.exe
-  Arguments: /d /s /c cross-env NODE_ENV=development webpack-dev-server
-  Directory: d:\Projects\hashman
-  Output:
-  
-      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
-      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
-      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
-      at ChildProcess.emit (events.js:182:13)
-      at maybeClose (internal/child_process.js:957:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:246:5)
+  Error: https://registry.yarnpkg.com/react-icons-kit/-/react-icons-kit-1.1.5.tgz: ESOCKETTIMEDOUT
+      at ClientRequest.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:133061:19)
+      at Object.onceWrapper (events.js:273:13)
+      at ClientRequest.emit (events.js:182:13)
+      at TLSSocket.emitTimeout (_http_client.js:698:34)
+      at Object.onceWrapper (events.js:273:13)
+      at TLSSocket.emit (events.js:182:13)
+      at TLSSocket.Socket._onTimeout (net.js:447:8)
+      at ontimeout (timers.js:427:11)
+      at tryOnTimeout (timers.js:289:5)
+      at listOnTimeout (timers.js:252:5)

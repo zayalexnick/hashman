@@ -11,6 +11,9 @@ export const Navigation = styled.div`
   padding: 0 15px;
   
   border-bottom: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.2) };
+  
+  overflow-x: auto;
+  overflow-y: visible;
 `;
 
 export const NavItem = styled.div`

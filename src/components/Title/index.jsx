@@ -1,8 +1,12 @@
 import React from 'react';
-import { Wrapper, Text } from './styles';
+import { Wrapper, Text, Sub, Right } from './styles';
 
-export default ({ children }) => (
+export default ({ children, sub, right }) => (
     <Wrapper>
-        <Text>{ children }</Text>
+        <Text>
+            { children }
+            { sub ? <Sub type={sub.type}>{ sub.label }</Sub> : null }
+        </Text>
+        { right ? <Right>{ right }</Right> : null }
     </Wrapper>
 );

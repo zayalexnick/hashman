@@ -10,6 +10,7 @@ import Topbar from '~/modules/Topbar';
 
 import ServersScreen from '~/scenes/Servers';
 import RigsScreen from '~/scenes/Rigs';
+import RigScreen from '~/scenes/Rig';
 import EventsScreen from '~/scenes/Events';
 import IncomeScreen from '~/scenes/Income';
 
@@ -57,6 +58,7 @@ export default class extends Component<Props>
                             <Route exact path={`/rigs/:id`} component={RigsScreen} />
                             <Route exact path={`/rigs`} component={RigsScreen} />
                             <Route exact path={`/income`} component={IncomeScreen} />
+                            <Route exact path={`/rig/:id`} component={RigScreen} />
                         </Switch>
                     </Content>
                 </Container>

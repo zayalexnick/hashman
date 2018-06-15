@@ -7,6 +7,8 @@ import Title from '~/components/Title';
 import Paper from '~/components/Paper';
 import LoaderContainer from '~/components/Loader';
 import Tabs from '~/components/Tabs';
+import Tag from '~/components/Tag';
+import typeFromNumber from '~/utils/typeFromNumber';
 
 @hot(module)
 @connect((state) => ({
@@ -21,8 +23,11 @@ export default class extends Component // TODO Сделать устройств
 
     getItems = () => {
         const items = [];
+
+        const order = [4, 1, 2, 3, 0];
+
         this.props.servers.entities.map((server) => items.push({
-            label: server.ServerName,
+            label: <div style={{ display: 'flex', alignItems: 'center' }} ><span style={{ marginRight: '5px' }}>{ server.ServerName }</span> { Object.keys(server).filter((item) => item.indexOf('Rigs') !== -1).map((item, index) => <Tag key={index} type={typeFromNumber(order[index])}>{ server[item] }</Tag>) }</div>,
             index: server.ServerID,
             content: <RigsTable server={server} />
         }));

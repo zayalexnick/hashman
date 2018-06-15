@@ -24,7 +24,7 @@ export const getEvents = () => {
         }
         catch (e)
         {
-            console.log(e);
+            dispatch(eventsFailed({ code: null, message: e }));
         }
 
         dispatch(eventsReceived());

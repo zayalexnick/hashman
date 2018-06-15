@@ -17,7 +17,7 @@ export const Container = styled.div`
   
   background: ${ props => props.theme.colors.base.white };
   
-  box-shadow: 0 1px 15px 1px ${ props => rgba(props.theme.colors.base.black, 0.08) };
+  border: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.1) };
 `;
 
 export const Subes = styled.div`

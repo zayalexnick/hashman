@@ -12,26 +12,26 @@ export const Col = styled.div`
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.xs })
   {
-    width: calc(100% / 12 * ${ props => props.xs })
+    width: calc(100% / 12 * ${ props => props.xs });
   }
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.sm })
   {
-    width: calc(100% / 12 * ${ props => props.sm })
+    width: calc(100% / 12 * ${ props => props.sm });
   }
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.md })
   {
-    width: calc(100% / 12 * ${ props => props.md })
+    width: calc(100% / 12 * ${ props => props.md });
   }
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.bg })
   {
-    width: calc(100% / 12 * ${ props => props.bg })
+    width: calc(100% / 12 * ${ props => props.bg });
   }
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.lg })
   {
-    width: calc(100% / 12 * ${ props => props.lg })
+    width: calc(100% / 12 * ${ props => props.lg });
   }
 `;

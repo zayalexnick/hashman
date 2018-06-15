@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as actions from './actions';
 import LoaderContainer from '~/components/Loader';
 import { Table } from '~/components/Table';
@@ -17,21 +18,19 @@ export default class extends Component
 {
     componentDidMount()
     {
-        console.log(this.props.server.ServerName, 'Mounted');
         this.props.getRigs(this.props.server.ServerID);
         this.setState({ update: setInterval(() => this.props.getRigs(this.props.server.ServerID), 5000) });
     }
 
     componentWillUnmount()
     {
-        console.log(this.props.server.ServerName, 'Unmounted');
         clearInterval(this.state.update);
     }
 
     render()
     {
         const { rigs } = this.props;
-        console.log('Rigs', rigs);
+
         return (
             <LoaderContainer loading={rigs.entities.length === 0}>
                 { rigs.entities.length > 0 ? (
@@ -45,7 +44,8 @@ export default class extends Component
                                 label: 'Имя',
                                 index: 'Name',
                                 sorter: true,
-                                compare: (a, b) => a.Name.localeCompare(b.Name)
+                                compare: (a, b) => a.Name.localeCompare(b.Name),
+                                render: (value, record) => <Link to={`/rig/${record.RigID}`}>{ value }</Link>
                             },
                             {
                                 label: 'IP',
@@ -76,7 +76,7 @@ export default class extends Component
                                 index: 'Hashrate',
                                 render: (value, record) => <Tag type={typeFromNumber(record.HashrateT)}>{ hashrate(value) }</Tag>,
                                 sorter: true,
-                                compare: (a, b) => a - b
+                                compare: (a, b) => a.Hashrate - b.Hashrate
                             },
                         ]}
                         dataSource={rigs.entities[0].Rigs}

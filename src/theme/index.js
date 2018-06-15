@@ -1,6 +1,7 @@
 import colors from './colors';
 import variables from './variables';
 import table from './table';
+import stat from './stat';
 
 // TODO Сделать theme
 
@@ -14,5 +15,6 @@ export default {
         warning: '#ffae22',
         error: '#ff5500'
     },
-    table
+    table,
+    stat
 };

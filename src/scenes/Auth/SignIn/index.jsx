@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { Primary } from "~/components/Button";
+import Button from "~/components/Button";
 import { Form, Inline, Required } from '../styles';
 import { Input } from '~/components/Form';
 import Loader from '~/components/Loader';
@@ -38,7 +38,7 @@ export default class extends Component<Props>
                     <Input type="password" placeholder="Пароль" onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
                     <Inline>
                         <Required>Все поля обязательны</Required>
-                        <Primary onClick={this.signinHandler}>Войти</Primary>
+                        <Button type="primary" onClick={this.signinHandler}>Войти</Button>
                     </Inline>
                 </Form>
             </Loader>

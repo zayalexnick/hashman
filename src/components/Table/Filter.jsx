@@ -17,7 +17,7 @@ export default class extends Component
     {
         return (
             <Filter>
-                <FilterIcon onClick={() => this.setState({ opened: true })} />
+                <FilterIcon onClick={() => this.setState({ opened: !this.state.opened })} />
                 <FilterModal opened={this.state.opened}>
                     { Object.keys(this.state.data).map((item, index) => (
                         <label key={index}><input type="checkbox" onChange={(e) => this.props.change(item, e)} /> {item} ({ this.state.data[item] })</label>
