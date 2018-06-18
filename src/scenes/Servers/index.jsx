@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { ResponsiveContainer, LineChart, BarChart, Line, Bar, Tooltip, CartesianGrid } from 'recharts';
+import { ResponsiveContainer, LineChart, BarChart, Line, Bar, Tooltip } from 'recharts';
 import moment from 'moment'
 import * as actions from './actions';
 import LoaderContainer from '~/components/Loader';
@@ -15,8 +15,8 @@ import { Row, Col } from '~/components/Grid';
 import * as ToolTip from '~/components/ToolTip';
 import temperature from '~/utils/temperature';
 import hashrate from '~/utils/hashrate';
-import wallet from '~/utils/wallet';
 import typeFromNumber from '~/utils/typeFromNumber';
+import Event from '~/components/Event';
 
 const TooltipStability = (props) => (
     <ToolTip.Container>
@@ -139,7 +139,7 @@ export default class extends Component
     hashrateCharts = () => {
         let charts = [];
         Object.keys(this.props.servers.charts.Hashrate).map((chart) => charts.push({
-            label: chart,
+            label: `${chart}: ${hashrate(this.props.servers.charts.currentHashrate[chart])}`,
             index: chart,
             content: (
                 <ResponsiveContainer width="100%" height={80}>
@@ -151,6 +151,27 @@ export default class extends Component
             )
         }));
         return charts;
+    };
+
+    getCurrentTemperature = () => {
+        let arr = [];
+
+        const getType = (item) => {
+            switch (item)
+            {
+                case 'ETH': return 'error';
+                case 'BTC': return 'primary';
+                case 'В помещении': return 'success';
+                default: return 'default';
+            }
+        };
+
+        if (Object.keys(this.props.servers.charts).length > 0)
+            Object.keys(this.props.servers.charts.currentTemperatures).map((item, index) =>
+                arr.push(<Tag type={getType(item)} key={index}>{ item }: { temperature(this.props.servers.charts.currentTemperatures[item]) }</Tag>)
+            );
+
+        return arr;
     };
 
     render()
@@ -183,11 +204,7 @@ export default class extends Component
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Температура" loading={Object.keys(servers.charts).length === 0} subes={[
-                            <Tag type="success" key={1}>В помещении: { temperature(0) }</Tag>,
-                            <Tag type="primary" key={2}>BTC: { temperature(65) }</Tag>,
-                            <Tag type="error" key={3}>ETH: { temperature(78) }</Tag>
-                        ]}>
+                        <Paper title="Температура" loading={Object.keys(servers.charts).length === 0} subes={this.getCurrentTemperature()}>
                             <ResponsiveContainer width="100%" height={80}>
                                 <LineChart data={servers.charts.Temperature}>
                                     <Tooltip content={<TooltipTemperature />} />
@@ -199,8 +216,14 @@ export default class extends Component
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Дашборд" loading={Object.keys(servers.charts).length === 0}>
-
+                        <Paper title="События" loading={Object.keys(servers.charts).length === 0}>
+                            {Object.keys(servers.charts).length > 0 ? (
+                                servers.charts.Events.map((item, index) => (
+                                    <Event key={index} type={typeFromNumber(item.MessageT)}>
+                                        <span className="date">{ moment(item.date).format('L LT') }</span>{' '}<Link to={`/rigs/${item.ServerID}`}>{ item.ServerName }</Link>{' '}<Link to={`/rig/${item.RigID}`}>{ item.RigName }</Link>{' '}{ item.Message }
+                                    </Event>
+                                ))
+                            ) : null }
                         </Paper>
                     </Col>
                 </Row>

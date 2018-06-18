@@ -13,7 +13,7 @@ export const Navigation = styled.div`
   border-bottom: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.2) };
   
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: hidden;
 `;
 
 export const NavItem = styled.div`

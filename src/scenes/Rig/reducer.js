@@ -20,15 +20,19 @@ const initialState: State = {
     pending: {
         loading: false
     },
-    entities: []
+    entities: {},
+    charts: {},
+    events: []
 };
 
 const reducer = createReducer({
-    [actions.rigsRequested]: (state) => ({ ...state, pending: { ...state.pending, loading: true } }),
-    [actions.rigsReceived]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
-    [actions.rigsFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
-    [actions.rigsSuccessed]: (state, payload) => ({ ...state, entities: payload }),
-    [actions.rigsClear]: (state) => ({ ...state, entities: [] }),
+    [actions.rigRequested]: (state) => ({ ...state, pending: { ...state.pending, loading: true } }),
+    [actions.rigReceived]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
+    [actions.rigFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
+    [actions.rigSuccessed]: (state, payload) => ({ ...state, entities: payload }),
+    [actions.rigCharts]: (state, payload) => ({ ...state, charts: payload }),
+    [actions.rigEvents]: (state, payload) => ({ ...state, events: payload }),
+    [actions.rigClear]: () => initialState,
 }, initialState);
 
 export default reducer;

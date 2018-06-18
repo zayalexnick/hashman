@@ -19,12 +19,17 @@ export default class extends Component
     componentDidMount()
     {
         this.props.getRigs(this.props.server.ServerID);
-        this.setState({ update: setInterval(() => this.props.getRigs(this.props.server.ServerID), 5000) });
+        this.props.getCharts(this.props.server.ServerID);
+        this.setState({ update: setInterval(() => {
+            this.props.getRigs(this.props.server.ServerID);
+            this.props.getCharts(this.props.server.ServerID);
+        }, 5000)});
     }
 
     componentWillUnmount()
     {
         clearInterval(this.state.update);
+        this.props.rigsClear();
     }
 
     render()
@@ -80,7 +85,7 @@ export default class extends Component
                             },
                         ]}
                         dataSource={rigs.entities[0].Rigs}
-                        pagination={false}
+                        pagination={true}
                     />
                 ) : null }
             </LoaderContainer>

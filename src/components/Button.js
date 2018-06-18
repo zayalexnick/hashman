@@ -17,6 +17,9 @@ export default styled.button`
   
   ${ props => transitions(`border-color ${ props.theme.variables.animation.speed }`, `color ${ props.theme.variables.animation.speed }`) };
   
+  cursor: ${ props => props.disabled ? 'default' : 'pointer' };
+  opacity: ${ props => props.disabled ? 0.5 : 1 };
+  
   &:hover {
     color: ${ props => props.theme.colors.base.white };
     background: ${ props => lighten(0.05, props.type ? props.theme.notifications[props.type] : props.theme.notifications.default) };

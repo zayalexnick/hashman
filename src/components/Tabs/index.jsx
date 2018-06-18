@@ -7,6 +7,10 @@ export default class extends Component
         current: 0
     };
 
+    static defaultProps = {
+        onTab: () => {}
+    };
+
     componentDidMount()
     {
         this.setState({ current: parseInt(this.props.activeItem) || this.props.items[0].index });
@@ -14,6 +18,7 @@ export default class extends Component
 
     clickHandler = (index) => {
         this.setState({ current: index });
+        this.props.onTab();
     };
 
     getCurrent = () => this.props.items.filter((item) => item.index === this.state.current)[0] || null;
@@ -27,7 +32,7 @@ export default class extends Component
                 <Navigation>
                     { items.map((item) => <NavItem key={item.index} active={this.state.current === item.index} onClick={() => this.clickHandler(item.index)}>{ item.label }</NavItem>) }
                 </Navigation>
-                <Content>
+                <Content key={this.state.current}>
                     { this.getCurrent() ? this.getCurrent().content : null }
                 </Content>
             </Tabs>

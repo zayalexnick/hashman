@@ -28,6 +28,7 @@ const reducer = createReducer({
     [actions.eventsReceived]: (state) => ({ ...state, pending: { ...state.pending, loading: false } }),
     [actions.eventsFailed]: (state, payload) => ({ ...state, error: { ...state.error, code: payload.code, message: payload.message } }),
     [actions.eventsSuccessed]: (state, payload) => ({ ...state, entities: payload }),
+    [actions.eventsClear]: () => initialState,
 }, initialState);
 
 export default reducer;

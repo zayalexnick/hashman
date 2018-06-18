@@ -26,7 +26,6 @@ export default class extends Component
         this.props.getEvents();
 
         this.setState({ update: setInterval(() => this.props.getEvents(), 5000) });
-        this.listenAll();
     }
 
     listenAll = () => {
@@ -48,6 +47,8 @@ export default class extends Component
     componentWillUnmount()
     {
         clearInterval(this.state.update);
+        this.listenAll();
+        this.props.eventsClear();
     }
 
     render()

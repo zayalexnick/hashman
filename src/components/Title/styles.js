@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import { rem } from 'polished';
 
-export const Wrapper = styled.h1`
+export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   
   margin-bottom: 30px;
   
   font-weight: 500;
-  font-size: ${ rem('19px') };
   color: ${ props => props.theme.colors.title.color };
   
   &:after {
@@ -25,10 +24,12 @@ export const Wrapper = styled.h1`
   }
 `;
 
-export const Text = styled.span`
+export const Text = styled.h1`
   flex-shrink: 0;
 
   padding: 10px 15px 10px 0;
+  
+  font-size: ${ rem('19px') };
   
   background: ${ props => props.theme.colors.base.bg };
   
@@ -48,4 +49,13 @@ export const Right = styled.div`
   
   margin-left: auto;
   padding: 10px 0 10px 15px;  
+`;
+
+export const SubTitle = styled.div`
+  margin-top: 5px;
+
+  font-size: ${ rem('13px') };
+  font-weight: 400;
+  
+  opacity: 0.8;
 `;

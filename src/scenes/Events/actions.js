@@ -7,6 +7,7 @@ export const eventsRequested = createAction('[EVENTS] Requested');
 export const eventsReceived = createAction('[EVENTS] Received');
 export const eventsFailed = createAction('[EVENTS] Failed');
 export const eventsSuccessed = createAction('[EVENTS] Successed');
+export const eventsClear = createAction('[EVENTS] Successed');
 
 export const getEvents = () => {
     return async (dispatch) => {

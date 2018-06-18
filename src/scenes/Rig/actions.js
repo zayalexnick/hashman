@@ -3,30 +3,78 @@ import { createAction } from 'redux-act';
 
 import IResult from '~/interfaces/IResult';
 
-export const rigsRequested = createAction('[RIGS] Requested');
-export const rigsReceived = createAction('[RIGS] Received');
-export const rigsFailed = createAction('[RIGS] Failed');
-export const rigsSuccessed = createAction('[RIGS] Successed');
-export const rigsClear = createAction('[RIGS] Clear');
 
-export const getRigs = (id) => async (dispatch) => {
+export const rigRequested = createAction('[RIG] Requested');
+export const rigReceived = createAction('[RIG] Received');
+export const rigFailed = createAction('[RIG] Failed');
+export const rigSuccessed = createAction('[RIG] Successed');
+export const rigClear = createAction('[RIG] Clear');
+export const rigCharts = createAction('[RIG] Charts');
+export const rigEvents = createAction('[RIG] Events');
+
+export const getRig = (id) => async (dispatch) => {
     try
     {
-        dispatch(rigsRequested());
+        dispatch(rigRequested());
 
-        const { data }: { data: IResult } = await api.get(`/api/rigs/${id}`);
+        const { data }: { data: IResult } = await api.get(`/api/rig/${id}`);
 
         if (data.ErrorCode < 0)
-            dispatch(rigsFailed({ code: data.ErrorCode, message: data.ErrorString }));
+            dispatch(rigFailed({ code: data.ErrorCode, message: data.ErrorString }));
         else
-            dispatch(rigsSuccessed(data.Data));
+            dispatch(rigSuccessed(data.Data));
     }
     catch (e)
     {
-        dispatch(rigsFailed({ code: null, message: e }));
+        dispatch(rigFailed({ code: null, message: e }));
     }
     finally
     {
-        dispatch(rigsReceived());
+        dispatch(rigReceived());
+    }
+};
+
+export const getCharts = (id) => async (dispatch) => {
+    try
+    {
+        dispatch(rigRequested());
+
+        const { data }: { data: IResult } = await api.get(`/api/infographs?r=${id}`);
+
+        if (data.ErrorCode < 0)
+            dispatch(rigFailed({ code: data.ErrorCode, message: data.ErrorString }));
+        else
+            dispatch(rigCharts(data.Data));
+    }
+    catch (e)
+    {
+        dispatch(rigFailed({ code: null, message: e }));
+    }
+    finally
+    {
+        dispatch(rigReceived());
+    }
+};
+
+
+export const getEvents = (id) => async (dispatch) => {
+    try
+    {
+        dispatch(rigRequested());
+
+        const { data }: { data: IResult } = await api.get(`/api/events?r=${id}`);
+
+        if (data.ErrorCode < 0)
+            dispatch(rigFailed({ code: data.ErrorCode, message: data.ErrorString }));
+        else
+            dispatch(rigEvents(data.Data));
+    }
+    catch (e)
+    {
+        dispatch(rigFailed({ code: null, message: e }));
+    }
+    finally
+    {
+        dispatch(rigReceived());
     }
 };

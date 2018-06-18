@@ -46,7 +46,7 @@ export default class extends Component<Props>
                 <Sidebar.Logo to={logo.to}>{ hidden && !hovered ? <FlashIcon /> : logo.label }</Sidebar.Logo>
                 <Sidebar.Content>
                     { navigate.map((item, index) => (
-                        <Sidebar.Link key={index} to={item.to} activeClassName="active" type={this.type()}>
+                        <Sidebar.Link key={index} to={item.to} activeClassName="active" type={this.type()} onClick={() => window.innerWidth <= 480 ? this.props.toggleSidebar() : null}>
                             <Sidebar.Icon type={this.type()}><item.icon /></Sidebar.Icon>
                             <Sidebar.Label type={this.type()}>{item.label}</Sidebar.Label>
                         </Sidebar.Link>
