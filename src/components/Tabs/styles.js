@@ -25,7 +25,7 @@ export const NavItem = styled.div`
 
   cursor: pointer;
   
-  color: ${ props => props.active ? props.theme.notifications.primary : props.theme.colors.base.dark };
+  color: ${ props => props.active ? props.color ? props.color : props.theme.notifications.primary : props.theme.colors.base.dark };
   
   ${ props => transitions(`color ${props.theme.variables.animation.speed}`) };
   
@@ -36,7 +36,7 @@ export const NavItem = styled.div`
   }
   
   &:hover {
-    color: ${ props => props.theme.notifications.primary };
+    color: ${ props => props.color ? props.color : props.theme.notifications.primary };
   }
 `;
 

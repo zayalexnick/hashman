@@ -12,9 +12,8 @@ export default styled.span`
   padding: 4px 7px;
 
   font-size: ${ rem('12px') };
-  color: ${ props => props.theme.colors.base.white };
+  font-weight: bold;
+  color: ${ props => props.type ? props.theme.notifications[props.type] : props.theme.colors.base.black };
   
   white-space: nowrap;
-  
-  background-color: ${ props => props.theme.notifications[props.type] };
 `;

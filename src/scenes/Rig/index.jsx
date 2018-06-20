@@ -5,15 +5,12 @@ import { Link } from 'react-router-dom';
 import * as actions from './actions';
 import Title from '~/components/Title';
 import { Row, Col } from '~/components/Grid';
-import Sticker from '~/components/Sticker';
 import Stat from '~/components/Stat';
 import Tabs from '~/components/Tabs';
 import LoaderContainer from '~/components/Loader';
-import { ResponsiveContainer, LineChart, BarChart, Line, Bar, Tooltip } from 'recharts';
-import WrenchIcon from 'react-icons/lib/md/build';
+import { ResponsiveContainer, LineChart, BarChart, Line, Bar, Tooltip, ReferenceArea } from 'recharts';
 import CogsIcon from 'react-icons/lib/fa/cogs';
 import MemoryIcon from 'react-icons/lib/md/memory';
-import VideoIcon from 'react-icons/lib/md/personal-video';
 import { Buttons, Button } from './styles';
 import RestartIcon from 'react-icons/lib/io/android-refresh';
 import EditIcon from 'react-icons/lib/io/edit';
@@ -29,6 +26,7 @@ import Event from '~/components/Event';
 import typeFromNumber from '~/utils/typeFromNumber';
 import { Table } from '~/components/Table';
 import { Message } from '~/scenes/Events/styles';
+import HashrateChart from './charts/Hashrate';
 
 const Settings = ({ rig }) => (
     <Buttons>
@@ -122,12 +120,22 @@ export default class extends Component
                 <ResponsiveContainer key={index} width="100%" height={80}>
                     <LineChart data={this.props.rig.charts.Hashrate[chart]}>
                         <Tooltip content={<TooltipHashrate />} />
-                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke='#ff0000' />
+                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={theme.notifications.error} />
                     </LineChart>
                 </ResponsiveContainer>
             )
         }));
         return charts;
+    };
+
+    getInfoChart = (chart) => {
+        let newChart = [];
+
+        chart.map((item, index) => {
+            newChart.push({ ...item, index })
+        });
+
+        return newChart;
     };
 
     render()
@@ -148,8 +156,8 @@ export default class extends Component
                             <ResponsiveContainer width="100%" height={80}>
                                 <BarChart data={rig.charts.Stability}>
                                     <Tooltip content={<TooltipStability />} />
-                                    <Bar dataKey="uptime" stackId="a" fill="#87d068" />
-                                    <Bar dataKey="downtime" stackId="a" fill="#ff5500" />
+                                    <Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
+                                    <Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </Paper>
@@ -168,9 +176,9 @@ export default class extends Component
                             <ResponsiveContainer width="100%" height={80}>
                                 <LineChart data={rig.charts.Temperature}>
                                     <Tooltip content={<TooltipTemperature />} />
-                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke='#87d068' />
-                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke='#4482ff' />
-                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke='#ff5500' />
+                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
+                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
+                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </Paper>
@@ -187,20 +195,7 @@ export default class extends Component
                         </Paper>
                     </Col>
                 </Row>
-                <Row>
-                    <Col xs={12} bg={6} lg={3}>
-                        <Sticker type="primary" icon={<WrenchIcon />} title="Материнская плата">{ entities.Mainboard }</Sticker>
-                    </Col>
-                    <Col xs={12} bg={6} lg={3}>
-                        <Sticker type="success" icon={<CogsIcon />} title="Процессор">{ entities.CPU }</Sticker>
-                    </Col>
-                    <Col xs={12} bg={6} lg={3}>
-                        <Sticker type="error" icon={<MemoryIcon />} title="Оперативная память">{ memory(entities.RAM) }</Sticker>
-                    </Col>
-                    <Col xs={12} bg={6} lg={3}>
-                        <Sticker type="warning" icon={<VideoIcon />} title="GPU">{ entities.Driver } { entities.GpuCount } шт.</Sticker>
-                    </Col>
-                </Row>
+
                 <Row>
                     <Col xs={12} md={6} bg={4}>
                         <LoaderContainer loading={ Object.keys(entities).length === 0 }>
@@ -256,24 +251,24 @@ export default class extends Component
                                     ]
                                 },
                                 {
-                                    label: 'Установки',
+                                    label: 'Оборудование',
                                     icon: <RestartIcon />,
                                     items: [
                                         {
-                                            title: 'Установлен режим',
-                                            text: 'eth2'
+                                            title: 'Материнская плата',
+                                            text: entities.Mainboard
                                         },
                                         {
-                                            title: 'Установка частоты GPU',
-                                            text: '-200'
+                                            title: 'Процессор',
+                                            text: entities.CPU
                                         },
                                         {
-                                            title: 'Установка частоты памяти',
-                                            text: '1100'
+                                            title: 'Оперативная память',
+                                            text: memory(entities.RAM)
                                         },
                                         {
-                                            title: 'Питание GPU',
-                                            text: '100Вт'
+                                            title: 'GPU',
+                                            text: `${ entities.Driver } ${ entities.GpuCount }`
                                         },
                                     ]
                                 }
@@ -316,6 +311,12 @@ export default class extends Component
                         </Paper>
                     </Col>
                 </Row>
+                <Row>
+                    { Object.keys(this.props.rig.charts).length > 0 ? Object.keys(this.props.rig.charts.Hashrate).map((chart, index) => (
+                        <HashrateChart key={index} chart={this.getInfoChart(this.props.rig.charts.Hashrate[chart])} title={chart} />
+                    )) : null }
+                </Row>
+
             </div>
         );
     }

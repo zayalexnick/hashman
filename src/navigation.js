@@ -11,7 +11,7 @@ type Item = {
 
 const navigation: Array<Item> = [
     {
-        to: '/servers',
+        to: '/',
         icon: GlobeIcon,
         label: 'Фермы'
     },

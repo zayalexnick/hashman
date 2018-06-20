@@ -25,12 +25,12 @@ export default class extends Component
 
     render()
     {
-        const { items } = this.props;
+        const { items, color } = this.props;
 
         return (
             <Tabs>
                 <Navigation>
-                    { items.map((item) => <NavItem key={item.index} active={this.state.current === item.index} onClick={() => this.clickHandler(item.index)}>{ item.label }</NavItem>) }
+                    { items.map((item) => <NavItem color={color} key={item.index} active={this.state.current === item.index} onClick={() => this.clickHandler(item.index)}>{ item.label }</NavItem>) }
                 </Navigation>
                 <Content key={this.state.current}>
                     { this.getCurrent() ? this.getCurrent().content : null }

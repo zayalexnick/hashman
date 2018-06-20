@@ -18,6 +18,7 @@ import Event from '~/components/Event';
 import temperature from '~/utils/temperature';
 import hashrate from '~/utils/hashrate';
 import * as ToolTip from '~/components/ToolTip';
+import theme from '~/theme';
 
 const TooltipStability = (props) => (
     <ToolTip.Container>
@@ -112,7 +113,7 @@ export default class extends Component // TODO Сделать устройств
                 <ResponsiveContainer width="100%" height={80}>
                     <LineChart data={this.props.rigs.charts.Hashrate[chart]}>
                         <Tooltip content={<TooltipHashrate />} />
-                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke='#ff0000' />
+                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={theme.notifications.error} />
                     </LineChart>
                 </ResponsiveContainer>
             )
@@ -154,8 +155,8 @@ export default class extends Component // TODO Сделать устройств
                             <ResponsiveContainer width="100%" height={80}>
                                 <BarChart data={rigs.charts.Stability}>
                                     <Tooltip content={<TooltipStability />} />
-                                    <Bar dataKey="uptime" stackId="a" fill="#87d068" />
-                                    <Bar dataKey="downtime" stackId="a" fill="#ff5500" />
+                                    <Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
+                                    <Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </Paper>
@@ -170,9 +171,9 @@ export default class extends Component // TODO Сделать устройств
                             <ResponsiveContainer width="100%" height={80}>
                                 <LineChart data={rigs.charts.Temperature}>
                                     <Tooltip content={<TooltipTemperature />} />
-                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke='#87d068' />
-                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke='#4482ff' />
-                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke='#ff5500' />
+                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
+                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
+                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </Paper>

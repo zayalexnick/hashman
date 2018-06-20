@@ -40,6 +40,7 @@ export default class extends Component<Props>
     {
         const { logo, navigate } = this.props;
         const { hidden, hovered } = this.props.sidebar;
+        console.log(this.props);
 
         return (
             <Sidebar.Wrapper type={this.type()} onMouseEnter={this.enterHandler} onMouseLeave={this.leaveHandler}>
