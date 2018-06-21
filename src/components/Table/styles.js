@@ -4,14 +4,15 @@ import SorterIcon from 'react-icons/lib/fa/sort';
 import IconFilter from 'react-icons/lib/fa/filter';
 
 export const Container = styled.div`
-  width: 100%;
-  overflow-x: auto;
-  
   .pagination {
     display: flex;
     justify-content: flex-start;
     
-    margin-top: 20px;
+    margin-left: auto;
+    
+    @media screen and (min-width: ${ props => props.theme.variables.breakpoints.sm }) {
+      margin-left: 20px;
+    }
     
     list-style: none;
     
@@ -21,7 +22,11 @@ export const Container = styled.div`
     }
     
     li {
-      display: flex;
+      display: none;
+      
+      @media screen and (min-width: ${ props => props.theme.variables.breakpoints.sm }) {
+        display: flex;
+      }
     
       margin: 0 5px;
       
@@ -31,6 +36,10 @@ export const Container = styled.div`
       
       &:last-child {
         margin-right: 0;
+      }
+      
+      &.next, &.previous {
+        display: flex;
       }
       
       a {
@@ -76,9 +85,20 @@ export const Container = styled.div`
   }
 `;
 
+export const TableContainer = styled.div`
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+`;
+
 export const Table = styled.table`
+  position: ${ props => props.fixed ? 'absolute' : 'relative' };
+  top: ${ props => props.fixed ? props.top : 0 }px;
+
   width: 100%;
   max-width: 100%;
+  
+  margin-top: ${ props => props.topOffset ? props.topOffset : 0 }px;
   
   border-collapse: separate;
   border-spacing: 0;
@@ -87,6 +107,8 @@ export const Table = styled.table`
   font-size: ${ rem('13px') };
   
   text-align: left;
+  
+  z-index: ${ props => props.fixed ? 2 : 1 };;
 `;
 
 export const Row = styled.tr`
@@ -100,6 +122,8 @@ export const Row = styled.tr`
 `;
 
 export const Column = styled.td`
+  position: relative;
+
   padding: 5px;
   
   line-height: 1.5;
@@ -125,7 +149,7 @@ export const Header = styled.thead`
 `;
 
 export const Body = styled.tbody`
-
+  
 `;
 
 export const Sorter = styled(SorterIcon)`
@@ -142,11 +166,11 @@ export const Sorter = styled(SorterIcon)`
 `;
 
 export const Filter = styled.span`
-  position: relative;
+  
 `;
 
 export const FilterIcon = styled(IconFilter)`
-  color: ${ props => props.active === "true" ? props.theme.table.colors.active : rgba(props.theme.colors.base.dark, 0.6) }; 
+  color: ${ props => props.active ? props.theme.table.colors.active : rgba(props.theme.colors.base.dark, 0.6) }; 
 
   cursor: pointer;
 `;
@@ -156,9 +180,31 @@ export const FilterModal = styled.div`
   top: 100%;
   right: 0;
   
+  width: calc(100% + 20px);
+  max-height: 200px;
+  
+  overflow-y: auto;
+  overflow-x: visible;
+  
   display: ${ props => props.opened ? 'flex' : 'none' };
+  flex-direction: column;
   
   padding: 10px;
   
   background: ${ props => props.theme.colors.base.white };
+  
+  box-shadow: 0 1px 4px ${ props => rgba(props.theme.colors.base.black, 0.2) };
+  
+  z-index: 2;
+`;
+
+export const Pagination = styled.div`
+  display: flex;
+  justify-content: space-between;
+  
+  @media screen and (min-width: ${ props => props.theme.variables.breakpoints.sm }) {
+    flex-direction: row;
+  }
+  
+  margin-top: 20px;
 `;

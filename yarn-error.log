@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-icons-kit
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js start:dev
 
 PATH: 
   D:\Cmder\bin;D:\Cmder\vendor\conemu-maximus5\ConEmu\Scripts;D:\Cmder\vendor\conemu-maximus5;D:\Cmder\vendor\conemu-maximus5\ConEmu;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\Git\cmd;C:\Program Files\TortoiseSVN\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\AMD\ATI.ACE\Core-Static;C:\Users\Alex\AppData\Local\Android\Sdk;C:\Users\Alex\AppData\Local\Android\Sdk\platform-tools;C:\Program Files (x86)\Yarn\bin\;D:\OpenServer\modules\phalcon-devtools\;D:\OpenServer\modules\php\PHP-7-x64\;C:\Users\alex2\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\alex2\AppData\Local\Android\Sdk\tools;C:\Users\alex2\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\Microsoft VS Code\bin;C:\Users\alex2\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\share\vim\vim74;D:\Cmder\
@@ -45,6 +45,9 @@ npm manifest:
     },
     "dependencies": {
       "axios": "^0.18.0",
+      "d3-scale": "^2.1.0",
+      "d3-time": "^1.0.8",
+      "humanize-duration": "^3.15.0",
       "lodash": "^4.17.10",
       "moment": "^2.22.2",
       "polished": "^1.9.2",
@@ -1867,6 +1870,17 @@ Lockfile:
       d3-time "1"
       d3-time-format "2"
   
+  d3-scale@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-2.1.0.tgz#8d3fd3e2a7c9080782a523c08507c5248289eef8"
+    dependencies:
+      d3-array "^1.2.0"
+      d3-collection "1"
+      d3-format "1"
+      d3-interpolate "1"
+      d3-time "1"
+      d3-time-format "2"
+  
   d3-shape@1.2.0:
     version "1.2.0"
     resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.0.tgz#45d01538f064bafd05ea3d6d2cb748fd8c41f777"
@@ -1879,7 +1893,7 @@ Lockfile:
     dependencies:
       d3-time "1"
   
-  d3-time@1:
+  d3-time@1, d3-time@^1.0.8:
     version "1.0.8"
     resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.8.tgz#dbd2d6007bf416fe67a76d17947b784bffea1e84"
   
@@ -3049,6 +3063,10 @@ Lockfile:
   https-browserify@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
+  
+  humanize-duration@^3.15.0:
+    version "3.15.0"
+    resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.15.0.tgz#9fe3124c4a013f9d71e4b25a143afa6853f90844"
   
   iconv-lite@0.4.19:
     version "0.4.19"
@@ -6420,14 +6438,16 @@ Lockfile:
       yeoman-environment "^2.0.5"
 
 Trace: 
-  Error: https://registry.yarnpkg.com/react-icons-kit/-/react-icons-kit-1.1.5.tgz: ESOCKETTIMEDOUT
-      at ClientRequest.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:133061:19)
-      at Object.onceWrapper (events.js:273:13)
-      at ClientRequest.emit (events.js:182:13)
-      at TLSSocket.emitTimeout (_http_client.js:698:34)
-      at Object.onceWrapper (events.js:273:13)
-      at TLSSocket.emit (events.js:182:13)
-      at TLSSocket.Socket._onTimeout (net.js:447:8)
-      at ontimeout (timers.js:427:11)
-      at tryOnTimeout (timers.js:289:5)
-      at listOnTimeout (timers.js:252:5)
+  Error: Command failed.
+  Exit code: 3221225786
+  Command: C:\Windows\system32\cmd.exe
+  Arguments: /d /s /c cross-env NODE_ENV=development webpack-dev-server
+  Directory: d:\Projects\hashman
+  Output:
+  
+      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
+      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
+      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
+      at ChildProcess.emit (events.js:182:13)
+      at maybeClose (internal/child_process.js:957:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:246:5)

@@ -10,22 +10,29 @@ export default class extends Component
         filtered: false
     };
 
+    constructor(props, context)
+    {
+        super(props, context);
+    }
+
+    element = React.createRef();
+
     change = (item, e) => {
         if (e.target.checked)
-            this.props.addFilter({ filter: item, filterFunc: (record) => record[this.props.index].includes(item) })
+            this.props.addFilter({ column: this.props.index, filter: item, filterFunc: (record) => record[this.props.index].includes(item) });
         else
-            this.props.removeFilter(item);
+            this.props.removeFilter({ column: this.props.index, id: item });
     };
 
     render()
     {
-        const { label, sorter, filtered, index, filter, compare, compareBy, sorterColumn, source } = this.props;
+        const { label, sorter, filtered, index, activeFilter, compare, compareBy, sorterColumn, source } = this.props;
 
         return (
-            <Column>
+            <Column ref={(ref) => this.element = ref} style={{ width: this.props.width }}>
                 <span>{ label }</span>
                 { sorter ? <Sorter active={(sorterColumn === index).toString()} onClick={() => compareBy(index, compare)} /> : null }
-                { filtered ? <Filter data={_.countBy(source, index)} change={this.change} /> : null }
+                { filtered ? <Filter activeFilter={activeFilter} data={_.countBy(source, index)} change={this.change} /> : null }
             </Column>
         );
     }

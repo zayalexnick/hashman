@@ -65,21 +65,24 @@ export default class extends Component
                                 {
                                     label: 'Время',
                                     index: 'date',
-                                    render: (value) => moment(value).format('L LTS')
+                                    render: (value) => moment(value).format('L LTS'),
                                 },
                                 {
                                     label: 'Сервер',
                                     index: 'ServerName',
-                                    render: (value, record) => <Link to={`/rigs/${record.ServerID}`}>{ value }</Link>
+                                    render: (value, record) => <Link to={`/rigs/${record.ServerID}`}>{ value }</Link>,
+                                    filtered: true
                                 },
                                 {
                                     label: 'Рига',
                                     index: 'RigName',
-                                    render: (value, record) => <Link to={`/rig/${record.RigID}`}>{ value }</Link>
+                                    render: (value, record) => <Link to={`/rig/${record.RigID}`}>{ value }</Link>,
+                                    filtered: true
                                 },
                                 {
                                     label: 'Тип',
-                                    index: 'EventType'
+                                    index: 'EventType',
+                                    filtered: true
                                 },
                                 {
                                     label: 'Сообщение',

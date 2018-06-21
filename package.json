@@ -36,6 +36,7 @@
     "moment": "^2.22.2",
     "polished": "^1.9.2",
     "react": "^16.4.0",
+    "react-click-outside": "^3.0.1",
     "react-dom": "^16.4.0",
     "react-icons": "^2.2.7",
     "react-paginate": "^5.2.3",

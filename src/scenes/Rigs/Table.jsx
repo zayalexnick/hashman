@@ -57,7 +57,6 @@ export default class extends Component
                                 index: 'IP',
                                 sorter: true,
                                 compare: (a, b) => a.IP.localeCompare(b.IP),
-                                filtered: true
                             },
                             {
                                 label: 'Статус',
@@ -68,7 +67,8 @@ export default class extends Component
                             {
                                 label: 'Режим',
                                 index: 'RunMode',
-                                render: (value, record) => <Tag type={typeFromNumber(record.RunModeT)}>{ value }</Tag>
+                                render: (value, record) => <Tag type={typeFromNumber(record.RunModeT)}>{ value }</Tag>,
+                                filtered: true
                             },
                             {
                                 label: 'Температура',

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Column } from './styles';
 
 export default class extends Component
@@ -8,19 +9,19 @@ export default class extends Component
         compare: (a, b) => a - b
     };
 
-    state = {
-
-    };
+    element = null;
 
     componentDidMount()
     {
         this.setState({ ...this.props.onRow(this.props.record) });
+        this.props.setColumnWidth(this.props.index, findDOMNode(this.element).offsetWidth);
+
     }
 
     render()
     {
         return (
-            <Column styles={this.state.styles}>{ this.props.render(this.props.record[this.props.index], this.props.record) }</Column>
+            <Column ref={(ref) => this.element = ref}>{ this.props.render(this.props.record[this.props.index], this.props.record) }</Column>
         );
     }
 }
