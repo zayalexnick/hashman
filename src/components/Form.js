@@ -120,7 +120,7 @@ export const ToggleComp = styled.span`
     
     border-radius: 50%;
     
-    background: ${ props => props.theme.notifications.primary };
+    background: ${ props => props.checked ? props.theme.notifications.primary : rgba(props.theme.colors.base.dark, 0.3) };
   }
 `;
 
@@ -166,3 +166,54 @@ export const Toggle = ({ checked, children, onChange }) => (
         <input type="checkbox" name={name} id={name} style={{ display: 'none' }} onChange={onChange} />
     </Radio>
 );
+
+const CheckboxLabel = styled.label`
+	position: relative;
+	cursor: pointer;
+	
+	input {
+		display: none;
+	}
+`;
+
+const CheckboxIcon = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	width: 15px;
+	height: 15px;
+	
+	border: 1px solid ${ props => props.checked ? props.theme.notifications.primary : rgba(props.theme.colors.base.black, 0.4) };
+	
+	background: ${ props => props.checked ? props.theme.notifications.primary : 'none' };
+	
+	.icon {
+		color: ${ props => props.theme.colors.base.white }; 
+		opacity: ${ props => props.checked ? 1 : 0 };
+	}
+`;
+
+export class CheckBox extends Component
+{
+	state = {
+		checked: false
+	};
+
+	componentWillReceiveProps(nextProps)
+	{
+		this.setState({ checked: nextProps.checked })
+	}
+
+	render()
+	{
+		return (
+			<CheckboxLabel>
+				<CheckboxIcon checked={this.state.checked}>
+					<CheckIcon className="icon" />
+				</CheckboxIcon>
+				<input type="checkbox" checked={this.state.checked} onChange={(e) => this.props.onChange(e)} />
+			</CheckboxLabel>
+		);
+	}
+}

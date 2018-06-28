@@ -9,6 +9,8 @@ import Tag from '~/components/Tag';
 import hashrate from '~/utils/hashrate';
 import temperature from '~/utils/temperature';
 import typeFromNumber from '~/utils/typeFromNumber';
+import Button from "~/components/Button";
+import Stat from '~/components/Stat';
 
 @hot(module)
 @connect((state) => ({
@@ -40,6 +42,15 @@ export default class extends Component
             <LoaderContainer loading={rigs.entities.length === 0}>
                 { rigs.entities.length > 0 ? (
                     <Table
+						selected
+						footer={(props) =>
+								(
+									<div style={{ display: 'flex' }}>
+										<Button disabled={props.selectedColumns.length === 0} type="primary">Редактировать</Button>
+										<Button disabled={props.selectedColumns.length === 0} type="warning">Перезагрузить</Button>
+									</div>
+								)
+						}
                         columns={[
                             {
                                 label: 'ID',

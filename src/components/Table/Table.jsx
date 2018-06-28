@@ -4,8 +4,9 @@ import Paginate from 'react-paginate';
 import _ from 'lodash';
 import HeaderColumn from './HeaderColumn';
 import Column from './Column';
+import SelectColumn from './SelectColumn';
 import { Toggle } from '~/components/Form';
-import { Container, TableContainer, Table, Header, Body, Row, Pagination } from './styles';
+import { Container, TableContainer, Table, Header, Body, Row, Pagination, Footer, Column as TableColumn } from './styles';
 
 export default class extends Component // TODO Сделать сортировку и фильтрацию
 {
@@ -13,6 +14,8 @@ export default class extends Component // TODO Сделать сортировк
         pagination: false,
         countPerPage: 25,
         fixedHeader: false,
+		selected: false,
+		footer: null,
         onRow: (record) => ({})
     };
 
@@ -30,10 +33,13 @@ export default class extends Component // TODO Сделать сортировк
             countPerPage: this.props.countPerPage,
             currentPage: 0,
             filters: {},
+			footer: false,
             pagination: this.props.pagination,
             fixedHeader: this.props.fixedHeader,
             headerHeight: 0,
             headerPosition: 0,
+			selected: this.props.selected,
+			selectedColumns: [],
             columnWidth: {}
         };
     }
@@ -143,16 +149,89 @@ export default class extends Component // TODO Сделать сортировк
     };
 
     changePage = (data) => {
-        this.setState({ currentPage: data.selected })
+        this.setState({ currentPage: data.selected });
     };
 
     setColumnWidth = async (column, width) => {
         await this.setState((prevState) => ({ columnWidth: { ...prevState.columnWidth, [column]: width } }));
     };
 
+    selectColumn = async (e) => {
+		const selectedColumns = this.state.selectedColumns;
+
+		const newColumns = [];
+		let isset = false;
+		selectedColumns.map((column) => {
+			if (column === e) isset = true;
+			if (column !== e) newColumns.push(column);
+		});
+
+		if (!isset) newColumns.push(e);
+
+		console.warn(newColumns);
+
+		await this.setState({ selectedColumns: newColumns });
+
+	};
+
+    selectColumns = (columns) => {
+		const selectedColumns = this.state.selectedColumns;
+		const newColumns = [ ...selectedColumns ];
+
+		columns.map((column) => {
+			if (!selectedColumns.includes(column)) newColumns.push(column);
+		});
+
+		console.log('ADD',newColumns);
+
+		this.setState({ selectedColumns: newColumns });
+	};
+
+    removeColumns = (columns) => {
+		const selectedColumns = this.state.selectedColumns.filter((selectedColumn) => !columns.includes(selectedColumn));
+
+		this.setState({ selectedColumns });
+	};
+
+    selectAll = (e) => {
+    	const { currentPage, copySource, countPerPage, pagination } = this.state;
+		let currentColumns = pagination ? copySource.slice(currentPage * countPerPage, (currentPage + 1) * countPerPage) : copySource;
+		const selectedColumns = this.state.selectedColumns;
+
+		const columns = [];
+
+		currentColumns.map((column) => {
+			columns.push(column.RigID);
+		});
+
+		if (!e)
+			this.selectColumns(columns);
+		else
+			this.removeColumns(columns);
+	};
+
+    allChecked = () => {
+		const { currentPage, copySource, countPerPage, pagination } = this.state;
+		let currentColumns = pagination ? copySource.slice(currentPage * countPerPage, (currentPage + 1) * countPerPage) : copySource;
+		const selectedColumns = this.state.selectedColumns;
+
+		let result = 0;
+
+		currentColumns.map((column) => {
+			if (!selectedColumns.includes(column.RigID)) result--;
+		});
+
+		return result === 0;
+	};
+
+    hasActive = () => {
+
+	};
+
     render()
     {
-        const { columns, dataSource, copySource, currentPage, countPerPage, pagination } = this.state;
+        const { columns, dataSource, copySource, currentPage, countPerPage, pagination, selected, selectedColumns } = this.state;
+        const { footer } = this.props;
 
         let source = copySource;
         if (pagination)
@@ -165,6 +244,7 @@ export default class extends Component // TODO Сделать сортировк
                         <Table fixed top={this.state.headerPosition}>
                             <Header ref="header">
                                 <Row>
+									{ selected ? <SelectColumn all checked={this.allChecked()} hasActive={this.hasActive()} onChange={this.selectAll} /> : null }
                                     { columns.map((column, index) => <HeaderColumn ref={column.index} width={this.state.columnWidth[column.index]} key={index} { ...column } compareBy={this.compareBy} addFilter={this.addFilter} removeFilter={this.removeFilter} sorterColumn={this.state.sorterColumn} activeFilter={Object.keys(this.state.filters).includes(column.index)} source={dataSource} />) }
                                 </Row>
                             </Header>
@@ -174,6 +254,7 @@ export default class extends Component // TODO Сделать сортировк
                         { !this.state.fixedHeader ? (
                             <Header ref="header">
                                 <Row>
+									{ selected ? <SelectColumn all checked={this.allChecked()} hasActive={this.hasActive()} onChange={this.selectAll} /> : null }
                                     { columns.map((column, index) => <HeaderColumn key={index} { ...column } compareBy={this.compareBy} addFilter={this.addFilter} removeFilter={this.removeFilter} sorterColumn={this.state.sorterColumn} activeFilter={Object.keys(this.state.filters).includes(column.index)} source={dataSource} />) }
                                 </Row>
                             </Header>
@@ -181,10 +262,20 @@ export default class extends Component // TODO Сделать сортировк
                         <Body>
                             { source.map((item, index) => (
                                 <Row key={index}>
+									{ selected ? <SelectColumn { ...item } index={index} checked={selectedColumns.includes(item.RigID)} onChange={this.selectColumn} /> : null }
                                     { columns.map((column) => <Column key={`${column.index}-${index}`} { ...column } record={ item } onRow={this.props.onRow} setColumnWidth={this.setColumnWidth} />) }
                                 </Row>
                             )) }
                         </Body>
+						{ footer ?
+							<Footer>
+								<Row>
+									<TableColumn colSpan={selected ? columns.length + 1 : columns.length}>
+										{ this.props.footer(this.state) }
+									</TableColumn>
+								</Row>
+							</Footer>
+						: null }
                     </Table>
                 </TableContainer>
                 <Pagination>

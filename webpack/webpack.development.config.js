@@ -23,7 +23,8 @@ export default new Config().extend('webpack/webpack.base.config.js').merge({
         hot: true,
         inline: true,
         noInfo: true,
-        progress: true
+        progress: true,
+        disableHostCheck: true
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

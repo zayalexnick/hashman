@@ -152,7 +152,7 @@ export default class extends Component // TODO Сделать устройств
                 <Row>
                     <Col xs={12} md={6} lg={3}>
                         <Paper title="Стабильность" loading={Object.keys(rigs.charts).length === 0}>
-                            <ResponsiveContainer width="100%" height={80}>
+                            <ResponsiveContainer width="100%" height={115}>
                                 <BarChart data={rigs.charts.Stability}>
                                     <Tooltip content={<TooltipStability />} />
                                     <Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />

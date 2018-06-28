@@ -109,7 +109,7 @@ export default class extends Component
         const ticks = domainToday.ticks(timeDay.every(1));
 
         return (
-            <Col xs={12} bg={6}>
+            <Col xs={12} lg={6}>
                 { data ? (
                     <Paper title={`Hashrate: ${title}`} loading={false} style={{ fontSize: '12px' }}>
                         { typeof left === 'number' ? <ZoomOut onClick={this.zoomOut} /> : null }

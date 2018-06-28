@@ -30,7 +30,6 @@ import HashrateChart from './charts/Hashrate';
 
 const Settings = ({ rig }) => (
     <Buttons>
-        <Button disabled={!rig.canEdit} type="primary"><div className="icon"><EditIcon /></div><span>Редактировать</span></Button>
         <Button disabled={!rig.canReboot} type="warning"><div className="icon"><RestartIcon /></div><span>Перезагрузить</span></Button>
     </Buttons>
 );
@@ -99,7 +98,6 @@ export default class extends Component
         this.props.getEvents(this.props.match.params.id);
 
         this.setState({ update: setInterval(() => {
-            this.props.getRig(this.props.match.params.id);
             this.props.getCharts(this.props.match.params.id);
             this.props.getEvents(this.props.match.params.id);
         }, 5000) });
@@ -147,135 +145,181 @@ export default class extends Component
 
         return (
             <div>
-                <Title right={<Settings rig={entities} />} subtitle={entities.rigHash}>Рига: { entities.Name }</Title>
-                <Row>
-                    <Col xs={12} md={6} lg={3}>
-                        <Paper title="Стабильность" loading={Object.keys(rig.charts).length === 0} subes={[
-                            <Tag type={ entities.IsOnline ? 'success' : 'error' }>{ time.humanize(false) }</Tag>,
-                        ]}>
-                            <ResponsiveContainer width="100%" height={80}>
-                                <BarChart data={rig.charts.Stability}>
-                                    <Tooltip content={<TooltipStability />} />
-                                    <Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
-                                    <Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </Paper>
-                    </Col>
-                    <Col xs={12} md={6} lg={3}>
-                        <Paper title="Хэшрейт" loading={Object.keys(rig.charts).length === 0}>
-                            { Object.keys(rig.charts).length > 0 ? <Tabs items={this.hashrateCharts()} /> : null }
-                        </Paper>
-                    </Col>
-                    <Col xs={12} md={6} lg={3}>
-                        <Paper title="Температура" loading={Object.keys(rig.charts).length === 0} subes={[
-                            <Tag type="success" key={1}>В помещении: { temperature(0) }</Tag>,
-                            <Tag type="primary" key={2}>BTC: { temperature(65) }</Tag>,
-                            <Tag type="error" key={3}>ETH: { temperature(78) }</Tag>
-                        ]}>
-                            <ResponsiveContainer width="100%" height={80}>
-                                <LineChart data={rig.charts.Temperature}>
-                                    <Tooltip content={<TooltipTemperature />} />
-                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
-                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
-                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </Paper>
-                    </Col>
-                    <Col xs={12} md={6} lg={3}>
-                        <Paper title="События" loading={Object.keys(rig.charts).length === 0}>
-                            {Object.keys(rig.charts).length > 0 ? (
-                                rig.charts.Events.map((item, index) => (
-                                    <Event key={index} type={typeFromNumber(item.MessageT)}>
-                                        <span className="date">{ moment(item.date).format('L LT') }</span>{' '}{ item.Message }
-                                    </Event>
-                                ))
-                            ) : null }
-                        </Paper>
-                    </Col>
-                </Row>
+				<Title right={<Settings rig={entities} />} subtitle={entities.rigHash}>Рига: 123</Title>
+				<Row>
+					<Col xs={12} md={6} lg={3}>
+						<Paper title="Стабильность" loading={Object.keys(rig.charts).length === 0} subes={[
+							<Tag type={ entities.IsOnline ? 'success' : 'error' }>{ time.humanize(false) }</Tag>,
+						]}>
+							<ResponsiveContainer width="100%" height={80}>
+								<BarChart data={rig.charts.Stability}>
+									<Tooltip content={<TooltipStability />} />
+									<Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
+									<Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
+								</BarChart>
+							</ResponsiveContainer>
+						</Paper>
+					</Col>
+					<Col xs={12} md={6} lg={3}>
+						<Paper title="Хэшрейт" loading={Object.keys(rig.charts).length === 0}>
+							{ Object.keys(rig.charts).length > 0 ? <Tabs items={this.hashrateCharts()} /> : null }
+						</Paper>
+					</Col>
+					<Col xs={12} md={6} lg={3}>
+						<Paper title="Температура" loading={Object.keys(rig.charts).length === 0} subes={[
+							<Tag type="success" key={1}>В помещении: { temperature(0) }</Tag>,
+							<Tag type="primary" key={2}>BTC: { temperature(65) }</Tag>,
+							<Tag type="error" key={3}>ETH: { temperature(78) }</Tag>
+						]}>
+							<ResponsiveContainer width="100%" height={80}>
+								<LineChart data={rig.charts.Temperature}>
+									<Tooltip content={<TooltipTemperature />} />
+									<Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
+									<Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
+									<Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
+								</LineChart>
+							</ResponsiveContainer>
+						</Paper>
+					</Col>
+					<Col xs={12} md={6} lg={3}>
+						<Paper title="События" loading={Object.keys(rig.charts).length === 0}>
+							{Object.keys(rig.charts).length > 0 ? (
+								rig.charts.Events.map((item, index) => (
+									<Event key={index} type={typeFromNumber(item.MessageT)}>
+										<span className="date">{ moment(item.date).format('L LT') }</span>{' '}{ item.Message }
+									</Event>
+								))
+							) : null }
+						</Paper>
+					</Col>
+				</Row>
 
-                <Row>
-                    <Col xs={12} md={6} bg={4}>
-                        <LoaderContainer loading={ Object.keys(entities).length === 0 }>
-                            <Stat title="Характеристики" items={[
-                                {
-                                    label: 'Состояние',
-                                    icon: <MemoryIcon />,
-                                    items: [
-                                        {
-                                            title: 'Состояние',
-                                            text: entities.IsOnline ?
-                                                <div style={{ color: theme.notifications.success }}>в сети</div> :
-                                                <div style={{ color: theme.notifications.error }}>офлайн</div>
-                                        },
-                                        {
-                                            title: 'Статус',
-                                            text: entities.StateStr
-                                        },
-                                        {
-                                            title: 'Скорость',
-                                            text: hashrate(entities.HashRate)
-                                        },
-                                        {
-                                            title: entities.IsOnline ? 'Uptime' : 'Downtime',
-                                            text: time.humanize(false)
-                                        },
-                                    ]
-                                },
-                                {
-                                    label: 'Параметры',
-                                    icon: <CogsIcon />,
-                                    items: [
-                                        {
-                                            title: 'IP',
-                                            text: entities.ip
-                                        },
-                                        {
-                                            title: 'Pool',
-                                            text: entities.Pool
-                                        },
-                                        {
-                                            title: 'Режим',
-                                            text: entities.RunMode
-                                        },
-                                        {
-                                            title: 'Coin',
-                                            text: entities.Coin
-                                        },
-                                        {
-                                            title: 'Кошелек',
-                                            text: entities.Wallet
-                                        },
-                                    ]
-                                },
-                                {
-                                    label: 'Оборудование',
-                                    icon: <RestartIcon />,
-                                    items: [
-                                        {
-                                            title: 'Материнская плата',
-                                            text: entities.Mainboard
-                                        },
-                                        {
-                                            title: 'Процессор',
-                                            text: entities.CPU
-                                        },
-                                        {
-                                            title: 'Оперативная память',
-                                            text: memory(entities.RAM)
-                                        },
-                                        {
-                                            title: 'GPU',
-                                            text: `${ entities.Driver } ${ entities.GpuCount }`
-                                        },
-                                    ]
-                                }
-                            ]} />
+				<Row>
+                    <Col xs={12} lg={6}>
+                        <LoaderContainer loading={ entities === 0 }>
+							{ Object.keys(entities).length > 0 ?
+								<Stat
+									ids={[entities.RigID]}
+									title="Характеристики"
+									items={entities.Config}
+									canReboot={entities.canReboot}
+									canEdit={entities.canEdit}
+									advanced={[
+										{
+											name: 'Оборудование',
+											items: [
+												{
+													Name: 'Mainboard',
+													Value: entities.Mainboard,
+													Description: 'Материнская плата',
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'CPU',
+													Value: entities.CPU,
+													Description: 'Процессор',
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'CPU',
+													Value: memory(entities.RAM) ,
+													Description: 'Оперативная память',
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'CPU',
+													Value: `${entities.Driver} ${entities.GpuCount} шт.`,
+													Description: 'Процессор',
+													readOnly: true,
+													Miners: null
+												},
+											]
+										},
+										{
+											name: 'Состояние',
+											items: [
+												{
+													Name: 'Status',
+													Description: 'Состояние',
+													Value: entities.IsOnline ?
+														<div style={{ color: theme.notifications.success }}>в сети</div> :
+														<div style={{ color: theme.notifications.error }}>офлайн</div>,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'StateStr',
+													Description: 'Статус',
+													Value: entities.StateStr,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'Speed',
+													Description: 'Скорость',
+													Value: hashrate(entities.HashRate),
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'State',
+													Description: entities.IsOnline ? 'Uptime' : 'Downtime',
+													Value: time.humanize(false),
+													readOnly: true,
+													Miners: null
+												},
+											]
+
+										},
+										{
+											name: 'Параметры',
+											items: [
+												{
+													Name: 'IP',
+													Description: 'IP',
+													Value: entities.ip,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'Pool',
+													Description: 'Pool',
+													Value: entities.Pool,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'RunMode',
+													Description: 'Режим',
+													Value: entities.RunMode,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'Coin',
+													Description: 'Coin',
+													Value: entities.Coin,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'Wallet',
+													Description: 'Кошелек',
+													Value: entities.Wallet,
+													readOnly: true,
+													Miners: null
+												},
+											]
+										}
+									]}
+								/>
+							: null }
                         </LoaderContainer>
                     </Col>
-                    <Col xs={12} md={6} bg={8}>
+                    <Col xs={12} lg={6}>
                         <Paper title="События" loading={rig.events.length === 0}>
                             <Table
                                 countPerPage={10}

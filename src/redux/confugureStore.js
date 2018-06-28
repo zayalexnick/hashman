@@ -11,5 +11,5 @@ import rootReducer from './reducer';
 
 export default () =>
     (process.env.NODE_ENV === 'development') ?
-        createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, logger))) :
+        createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk))) :
         createStore(rootReducer, compose(applyMiddleware(thunk)));

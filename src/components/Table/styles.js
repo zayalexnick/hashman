@@ -208,3 +208,7 @@ export const Pagination = styled.div`
   
   margin-top: 20px;
 `;
+
+export const Footer = styled(Header)`
+	
+`;
