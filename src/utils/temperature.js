@@ -1,1 +1,1 @@
-export default (temperature) => `${temperature} °C`;
+export default (temperature) => `${temperature}°C`;

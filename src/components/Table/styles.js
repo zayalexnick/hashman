@@ -98,8 +98,6 @@ export const Table = styled.table`
   width: 100%;
   max-width: 100%;
   
-  margin-top: ${ props => props.topOffset ? props.topOffset : 0 }px;
-  
   border-collapse: separate;
   border-spacing: 0;
   word-break: normal;
@@ -117,6 +115,7 @@ export const Row = styled.tr`
   ${ props => transitions(`background-color ${ props.theme.variables.animation.speed }`) };
   
   &:hover {
+  	cursor: pointer;
     background: ${ props => rgba(props.theme.colors.base.blue, 0.1) };
   }
 `;

@@ -1,159 +1,94 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import Button from '~/components/Button';
-import { Toggle } from '~/components/Form';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { Container, Header, Title, Tabs, Tab, Icon, Body, Item, ItemTitle, ItemText, ItemPlaceholder, Check, Error, EnabledBlock, EnabledLabel } from './styles';
-import MdMemory from 'react-icons/lib/md/memory';
-import FaClock from 'react-icons/lib/fa/clock-o';
-import FaCogs from 'react-icons/lib/fa/cogs';
-import FaFolder from 'react-icons/lib/fa/folder-o';
-import FaDashboard from 'react-icons/lib/fa/dashboard';
-import FaDatabase from 'react-icons/lib/fa/database';
+import { Container, Content, Item, Title, Text, Buttons, Check, Error } from './styles';
+import Tabs from '~/components/Tabs';
+import Button from "~/components/Button";
+import { Toggle } from "~/components/Form";
 
 export default class extends Component
 {
-    static defaultProps = {
-        type: 'primary',
-		items: [],
-		copy: [],
+	static defaultProps = {
+		items: {},
+		editable: false,
 		canReboot: false,
-		canEdit: false,
-		advanced: {},
-		title: 'Статистика'
-    };
+		canEdit: false
+	};
 
 	constructor(props, context)
 	{
 		super(props, context);
 
-		let newItems = {};
-
-		this.props.advanced.map((item) => {
-			newItems[item.name] = item.items;
-		});
-
-		_.map(this.props.items, (item, index) => {
-			if (!newItems[item.Group]) newItems[item.Group] = [];
-			newItems[item.Group].push(item);
-		});
-
-		this.state = { current: 0, items: newItems, copy: newItems, edit: false, canReboot: this.props.canReboot, canEdit: this.props.canEdit };
+		this.state = {
+			items: this.props.items,
+			copy: this.props.items,
+			editMode: false
+		}
 	}
 
-	changeEnabled = (item, index) => {
-		const currentGroup = this.state.copy[Object.keys(this.state.copy)[this.state.current]];
-
-		const newGroup = [];
-		currentGroup.map((element) => {
-			if (element.Name === item.Name) newGroup.push({ ...item, isEnabled: !item.isEnabled });
-			else newGroup.push(element);
-		});
-
-		this.setState({ copy: { ...this.state.copy, [Object.keys(this.state.copy)[this.state.current]]: newGroup } });
-	};
-
-	changeItem = (item, index, value) => {
-		const currentGroup = this.state.copy[Object.keys(this.state.copy)[this.state.current]];
-
-		const newGroup = [];
-		currentGroup.map((element) => {
-			if (element.Name === item.Name) newGroup.push({ ...item, Value: value });
-			else newGroup.push(element);
-		});
-
-		this.setState({ copy: { ...this.state.copy, [Object.keys(this.state.copy)[this.state.current]]: newGroup } });
-	};
-
-	renderEnabled = (item, index) => {
-		const currentItem = this.state.copy[Object.keys(this.state.copy)[this.state.current]][index];
-		return currentItem.useEnabled ? (
-			<EnabledBlock>
-				<EnabledLabel>Использовать:</EnabledLabel>
-				<Toggle checked={currentItem.isEnabled} onChange={() => this.changeEnabled(item, index)} />
-			</EnabledBlock>
-		) : null;
-	};
-
-	renderEditField = (item, index) => {
-		const currentItem = this.state.copy[Object.keys(this.state.copy)[this.state.current]][index];
+	renderEdit = (item, rootItem, index) => {
 		switch (item.Type) {
-			case 'bool': return <Toggle checked={currentItem.Value} onChange={() => this.changeItem(item, index, !currentItem.Value)} />;
-			case 'int': return <input type="number" min={currentItem.MinValue} max={currentItem.MaxValue} step={currentItem.StepValue} placeholder={currentItem.DefaultValue} value={currentItem.Value} onChange={(e) => this.changeItem(item, index, e.target.value)} />;
-			case 'text': return <input type="text" value={currentItem.Value} placeholder={currentItem.DefaultValue} onChange={(e) => this.changeItem(item, index, e.target.value)} />;
-			case 'textarea': return <textarea placeholder={currentItem.DefaultValue} onChange={(e) => this.changeItem(item, index, e.target.value)}>{currentItem.Value}</textarea>;
-			case 'select': return <select value={currentItem.Value} placeholder={currentItem.DefaultValue} onChange={(e) => this.changeItem(item, index, e.target.value)}><option value={null}>---</option>{ Object.keys(currentItem.SelectParams).map((item, index) => <option key={index} value={item}>{ currentItem.SelectParams[item] }</option>) }</select>;
-			default: return <ItemPlaceholder>---</ItemPlaceholder>;
+			case 'bool': return <Toggle checked={item.Value} onChange={() => this.changeItem(item, rootItem, index, !item.Value)} />;
+			case 'text': return <input type="text" value={item.Value || ''} placeholder={item.DefaultValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)} />;
+			case 'int': return <input type="number" value={item.Value || ''} placeholder={item.DefaultValue} min={item.MinValue} max={item.MaxValue} step={item.StepValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)} />;
+			case 'textarea': return <textarea placeholder={item.DefaultValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)}>{item.Value || ''}</textarea>;
+			case 'select': return <select value={item.Value} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)}><option value={false}>---</option>{ Object.keys(item.SelectParams).map((param, paramIndex) => <option key={paramIndex} value={param}>{item.SelectParams[param]}</option>) }</select>;
+			default: return <div>---</div>;
 		}
 	};
 
-	icons = () => {
-		return {
-			'Оборудование': <MdMemory />,
-			'Состояние': <FaClock />,
-			'Параметры': <FaCogs />,
-			'Основные': <FaFolder />,
-			'Разгон': <FaDashboard />,
-			'Майнинг': <FaDatabase />
-		};
+	changeItem = (item, rootItem, index, value) => {
+		const newGroup = [];
+
+		this.state.copy[rootItem].map((field, fieldIndex) => {
+			newGroup.push(fieldIndex === index ? { ...field, Value: value || null } : field);
+		});
+
+		this.setState({ copy: { ...this.state.copy, [rootItem]: newGroup } });
 	};
 
-    render()
-    {
-        const { title, type } = this.props;
-        const { current, copy, edit, canReboot, canEdit } = this.state;
+	getItems = () => {
+		const items = [];
+		_.map(Object.keys(this.state.copy), (item, index) =>
+			items.push({
+				label: item,
+				index: index,
+				content: <Content>
+					{ _.map(this.state.copy[item], (subitem, subindex) =>
+						(subitem.Miners === null || subitem.Miners.includes(this.state.copy['Майнинг'].filter(item => item.Name === 'RUN')[0].Value)) ?
+							<Item key={subindex}>
+								<Title>{subitem.Description}</Title>
+								{ this.state.editMode ? this.renderEdit(subitem, item, subindex) : <Text>{subitem.Type === 'select' ? subitem.SelectParams[subitem.Value] :  subitem.Type === 'bool' ?  subitem.Value ? <Check /> : <Error /> : subitem.Value || '---'}</Text> }
+							</Item>
+						: null)
+					}
+					{ !this.props.editable ? (
+						<Item>
+							{ this.state.editMode ? (
+								<Buttons>
+									<Button type="success">Сохранить</Button>
+									{ this.props.canReboot ? <Button type="warning">Перезагрузить</Button> : null }
+									<Button type="error" onClick={() => this.setState({ editMode: !this.state.editMode  })}>Отмена</Button>
+								</Buttons>
+							) : (
+								<Buttons>
+									{ this.props.canEdit ? <Button type="success" onClick={() => this.setState({ editMode: !this.state.editMode })}>Редактировать</Button> : null }
+								</Buttons>
+							) }
+						</Item>
+					) : null }
+				</Content>
+			})
+		);
 
-        return (
-            <Container>
-                <Header type={type}>
-                    <Title>{ title }</Title>
-					<Scrollbars
-						universal
-						autoHeight
-						autoHide
-					>
-						<Tabs>
-							{ Object.keys(copy).map((item, index) => (
-								<Tab key={index} type={type} active={index === current} onClick={() => this.setState({ current: index })}>
-									<Icon>{ this.icons()[item] }</Icon>
-									{ item }
-								</Tab>
-							)) }
-						</Tabs>
-					</Scrollbars>
-                </Header>
-				<Body>
-                    { copy[Object.keys(copy)[current]].map((item, index) => {
-                    	if (item.Miners === null || item.Miners.includes(copy['Майнинг'].filter(item => item.Name === 'RUN')[0].Value))
-							return (
-								<Item key={index}>
-									<ItemTitle>{ item.Description }</ItemTitle>
-									{!edit || item.readOnly ? (
-										<ItemText>{ item.Type === 'bool' ? item.Value ? <Check /> : <Error /> : item.Value || (<ItemPlaceholder>---</ItemPlaceholder>)}</ItemText>
-									) : (
-										<div style={{ display: 'flex' }}>
-											{ this.renderEditField(item, index) }
-											{ this.renderEnabled(item, index) }
-										</div>
-									) }
-								</Item>
-							);
-                    	else return null;
-                    }) }
-					{ !edit ? (
-						<Item inline>
-							{ canEdit ? <Button type="primary" onClick={() => this.setState({ edit: !edit })}>Редактировать</Button> : null }
-							{ canReboot ? <Button type="warning" onClick={() => this.setState({ edit: !edit })}>Перезагрузить</Button> : null }
-						</Item>
-					) : (
-						<Item inline>
-							<Button type="success" onClick={() => this.setState({ edit: !edit })}>Сохранить</Button>
-							{canReboot ? <Button type="warning" onClick={() => this.setState({ edit: !edit })}>Сохранить с перезагрузкой</Button> : null }
-							<Button type="error" onClick={() => this.setState({ copy: this.state.items, edit: !edit })}>Отмена</Button>
-						</Item>
-					) }
-                </Body>
-            </Container>
-        );
-    }
+		return items;
+	};
+
+	render()
+	{
+		return (
+			<Container>
+				<Tabs items={this.getItems()} />
+			</Container>
+		);
+	}
 }

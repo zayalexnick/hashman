@@ -16,7 +16,8 @@ export default class extends Component // TODO Сделать сортировк
         fixedHeader: false,
 		selected: false,
 		footer: null,
-        onRow: (record) => ({})
+        onRow: (record) => ({}),
+		onRowClick: (record) => ({})
     };
 
     constructor(props, context)
@@ -52,11 +53,11 @@ export default class extends Component // TODO Сделать сортировк
     }
 
     _onScroll = () => {
-        const currentPosition = -(findDOMNode(this.refs.table).getBoundingClientRect().top - 80);
+        /*const currentPosition = -(findDOMNode(this.refs.table).getBoundingClientRect().top - 80);
         if (currentPosition >= 0)
             this.setState({ headerPosition: currentPosition });
         else
-            this.setState({ headerPosition: 0 });
+            this.setState({ headerPosition: 0 });*/
     };
 
     componentWillReceiveProps()
@@ -65,9 +66,7 @@ export default class extends Component // TODO Сделать сортировк
             columns: this.props.columns,
             dataSource: this.props.dataSource,
             copySource: this.props.dataSource
-        });
-
-        this.updateTable();
+        }, () => this.updateTable());
     }
 
     updateTable = () => {
@@ -241,7 +240,7 @@ export default class extends Component // TODO Сделать сортировк
             <Container>
                 <TableContainer>
                     { this.state.fixedHeader ? (
-                        <Table fixed top={this.state.headerPosition}>
+                        <Table fixed top={this.state.headerPosition} onClick={(e) => console.log('TABLE')}>
                             <Header ref="header">
                                 <Row>
 									{ selected ? <SelectColumn all checked={this.allChecked()} hasActive={this.hasActive()} onChange={this.selectAll} /> : null }
@@ -263,7 +262,7 @@ export default class extends Component // TODO Сделать сортировк
                             { source.map((item, index) => (
                                 <Row key={index}>
 									{ selected ? <SelectColumn { ...item } index={index} checked={selectedColumns.includes(item.RigID)} onChange={this.selectColumn} /> : null }
-                                    { columns.map((column) => <Column key={`${column.index}-${index}`} { ...column } record={ item } onRow={this.props.onRow} setColumnWidth={this.setColumnWidth} />) }
+                                    { columns.map((column) => <Column onClick={() => this.props.onRowClick(item)} key={`${column.index}-${index}`} { ...column } record={ item } onRow={this.props.onRow} setColumnWidth={this.setColumnWidth} />) }
                                 </Row>
                             )) }
                         </Body>

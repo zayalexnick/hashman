@@ -7,14 +7,13 @@ export const eventsRequested = createAction('[EVENTS] Requested');
 export const eventsReceived = createAction('[EVENTS] Received');
 export const eventsFailed = createAction('[EVENTS] Failed');
 export const eventsSuccessed = createAction('[EVENTS] Successed');
-export const eventsClear = createAction('[EVENTS] Successed');
+export const eventsClear = createAction('[EVENTS] Clear');
 
 export const getEvents = () => {
     return async (dispatch) => {
-        dispatch(eventsRequested());
-
         try
         {
+			dispatch(eventsRequested());
             const response = await api.get('/api/events');
             const result: IResult = response.data;
 
@@ -22,12 +21,13 @@ export const getEvents = () => {
                 dispatch(eventsFailed({ code: result.ErrorCode, message: result.ErrorString }));
             else
                 dispatch(eventsSuccessed(result.Data));
+
+			dispatch(eventsReceived());
         }
         catch (e)
         {
             dispatch(eventsFailed({ code: null, message: e }));
+			dispatch(eventsReceived());
         }
-
-        dispatch(eventsReceived());
     }
 };

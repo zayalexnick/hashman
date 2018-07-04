@@ -70,13 +70,11 @@ export default class extends Component
                                 {
                                     label: 'Сервер',
                                     index: 'ServerName',
-                                    render: (value, record) => <Link to={`/rigs/${record.ServerID}`}>{ value }</Link>,
                                     filtered: true
                                 },
                                 {
                                     label: 'Рига',
                                     index: 'RigName',
-                                    render: (value, record) => <Link to={`/rig/${record.RigID}`}>{ value }</Link>,
                                     filtered: true
                                 },
                                 {
@@ -96,6 +94,7 @@ export default class extends Component
                                 if (!localStorage.getItem(`event-${record.EventID}`))
                                     return { styles: { backgroundColor: '#edfff2' } }
                             }}
+							onRowClick={(record) => this.props.history.push(`/rig/${record.RigID}`)}
                         />
                     </LoaderContainer>
                 </Paper>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as serversActions from '~/scenes/Servers/actions';
 import * as actions from './actions';
 import RigsTable from './Table';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Row, Col } from '~/components/Grid';
 import { ResponsiveContainer, LineChart, BarChart, Line, Bar, Tooltip } from 'recharts';
 import Title from '~/components/Title';
@@ -19,6 +19,7 @@ import temperature from '~/utils/temperature';
 import hashrate from '~/utils/hashrate';
 import * as ToolTip from '~/components/ToolTip';
 import theme from '~/theme';
+import { rgba } from 'polished';
 
 const TooltipStability = (props) => (
     <ToolTip.Container>
@@ -72,10 +73,12 @@ const TooltipHashrate = (props) => (
     servers: state.servers,
     rigs: state.rigs
 }), { ...actions, ...serversActions })
-export default class extends Component // TODO Сделать устройства и устройство
+@withRouter
+export default class extends Component
 {
     state = {
-        update: null
+        update: null,
+		activeChart: null
     };
 
     componentDidMount()
@@ -96,9 +99,9 @@ export default class extends Component // TODO Сделать устройств
         const order = [4, 1, 2, 3, 0];
 
         this.props.servers.entities.map((server) => items.push({
-            label: <div style={{ display: 'flex', alignItems: 'center' }} ><span style={{ marginRight: '5px' }}>{ server.ServerName }</span> { Object.keys(server).filter((item) => item.indexOf('Rigs') !== -1).map((item, index) => <Tag key={index} type={typeFromNumber(order[index])}>{ server[item] }</Tag>) }</div>,
+            label: server.ServerName,
             index: server.ServerID,
-            content: <RigsTable server={server} />
+            content: <RigsTable server={server} history={this.props.history} />
         }));
 
         return items;
@@ -113,7 +116,7 @@ export default class extends Component // TODO Сделать устройств
                 <ResponsiveContainer width="100%" height={80}>
                     <LineChart data={this.props.rigs.charts.Hashrate[chart]}>
                         <Tooltip content={<TooltipHashrate />} />
-                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={theme.notifications.error} />
+                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={this.state.activeChart === 'hashrate' ? theme.notifications.primary : theme.notifications.hidden} />
                     </LineChart>
                 </ResponsiveContainer>
             )
@@ -125,18 +128,18 @@ export default class extends Component // TODO Сделать устройств
         let arr = [];
 
         const getType = (item) => {
-            switch (item)
-            {
-                case 'ETH': return 'error';
-                case 'BTC': return 'primary';
-                case 'В помещении': return 'success';
-                default: return 'default';
-            }
+			switch (item)
+			{
+				case 'GPU': return 'warning';
+				case 'ASIC': return 'primary';
+				case 'В помещении': return 'success';
+				default: return 'default';
+			}
         };
 
         if (Object.keys(this.props.rigs.charts).length > 0)
             Object.keys(this.props.rigs.charts.currentTemperatures).map((item, index) =>
-                arr.push(<Tag type={getType(item)} key={index}>{ item }: { temperature(this.props.rigs.charts.currentTemperatures[item]) }</Tag>)
+                arr.push(<Tag type={this.state.activeChart === 'temperature' ? getType(item) : 'hidden'} key={index}>{ item }: { temperature(this.props.rigs.charts.currentTemperatures[item]) }</Tag>)
             );
 
         return arr;
@@ -151,35 +154,35 @@ export default class extends Component // TODO Сделать устройств
                 <Title>Устройства</Title>
                 <Row>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Стабильность" loading={Object.keys(rigs.charts).length === 0}>
-                            <ResponsiveContainer width="100%" height={115}>
+                        <Paper title="Стабильность" loading={Object.keys(rigs.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'stability' })} onMouseLeave={() => this.setState({ activeChart: null })}>
+                            <ResponsiveContainer width="100%" height={135}>
                                 <BarChart data={rigs.charts.Stability}>
                                     <Tooltip content={<TooltipStability />} />
-                                    <Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
-                                    <Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
+                                    <Bar dataKey="uptime" stackId="a" fill={this.state.activeChart === 'stability' ? theme.notifications.success : rgba(theme.notifications.hidden, 0.8)} />
+                                    <Bar dataKey="downtime" stackId="a" fill={this.state.activeChart === 'stability' ? theme.notifications.error : theme.notifications.hidden} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Хэшрейт" loading={Object.keys(rigs.charts).length === 0}>
+                        <Paper title="Хэшрейт" loading={Object.keys(rigs.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'hashrate' })} onMouseLeave={() => this.setState({ activeChart: null })}>
                             { Object.keys(rigs.charts).length > 0 ? <Tabs items={this.hashrateCharts()} /> : null }
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Температура" loading={Object.keys(rigs.charts).length === 0} subes={this.getCurrentTemperature()}>
+                        <Paper title="Температура" loading={Object.keys(rigs.charts).length === 0} subes={this.getCurrentTemperature()} onMouseEnter={(e) => this.setState({ activeChart: 'temperature' })} onMouseLeave={() => this.setState({ activeChart: null })}>
                             <ResponsiveContainer width="100%" height={80}>
                                 <LineChart data={rigs.charts.Temperature}>
                                     <Tooltip content={<TooltipTemperature />} />
-                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
-                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
-                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
+                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.success : theme.notifications.hidden} />
+                                    <Line dot={false} type='monotone' dataKey='GPU' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.warning : theme.notifications.hidden} />
+                                    <Line dot={false} type='monotone' dataKey='ASIC' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.primary : theme.notifications.hidden} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="События" loading={Object.keys(rigs.charts).length === 0}>
+                        <Paper title="События" loading={Object.keys(rigs.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'events' })} onMouseLeave={() => this.setState({ activeChart: null })}>
                             {Object.keys(rigs.charts).length > 0 ? (
                                 rigs.charts.Events.map((item, index) => (
                                     <Event key={index} type={typeFromNumber(item.MessageT)}>

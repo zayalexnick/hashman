@@ -20,14 +20,6 @@ export const Header = styled.div`
   background: linear-gradient(45deg, ${ props => props.theme.notifications[props.type] }, ${ props => lighten(0.05, props.theme.notifications[props.type]) });
 `;
 
-export const Title = styled.div`
-  font-size: ${ rem('20px') };
-  font-weight: 500;
-  color: ${ props => props.theme.colors.base.white };
-  letter-spacing: 1.4px;
-  margin-bottom: 50px;
-`;
-
 export const Tabs = styled.div`
   display: flex;
   justify-content: space-between;
@@ -96,6 +88,7 @@ export const Item = styled.div`
   	padding: 5px 10px;
   	border: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.3) };
   	font-size: ${ rem('13px') };
+  	text-transform: none !important;
   }
   
   textarea {
@@ -103,18 +96,27 @@ export const Item = styled.div`
   }
 `;
 
-export const ItemTitle = styled.h3`
+export const Title = styled.h3`
   margin-bottom: 5px;
 
   font-size: ${ rem('13px') };
-  font-weight: 500;
+  font-weight: 500 !important;
   color: ${ props => props.theme.stat.title };
 `;
 
-export const ItemText = styled.div`
+export const Text = styled.div`
   font-size: ${ rem('17px') };
-  font-weight: 600;
+  font-weight: 600 !important;
+  text-transform: none !important;
   color: ${ props => props.theme.stat.text };
+`;
+
+export const Content = styled.div`
+
+`;
+
+export const Buttons = styled.div`
+	display: flex;
 `;
 
 export const ItemPlaceholder = styled.span`

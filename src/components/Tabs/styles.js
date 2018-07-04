@@ -7,36 +7,30 @@ export const Tabs = styled.div`
 
 export const Navigation = styled.div`
   display: flex;
-  
-  padding: 0 15px;
-  
-  border-bottom: 1px solid ${ props => rgba(props.theme.colors.base.black, 0.2) };
+  position: relative;
   
   overflow-x: auto;
-  overflow-y: hidden;
+  
+  margin-bottom: 20px;
 `;
 
 export const NavItem = styled.div`
-  margin-right: 25px;
-  margin-bottom: -1px;
-  padding: 10px 0;
+  position: relative;
+  z-index: 2;
+  padding: 10px 15px;
   
   font-size: ${ rem('14px') };
 
   cursor: pointer;
   
-  color: ${ props => props.active ? props.color ? props.color : props.theme.notifications.primary : props.theme.colors.base.dark };
+  color: ${ props => props.theme.colors.base.dark };
+  border: 1px solid ${ props => props.active ? props.color ? props.color : `${props.theme.colors.base.dark} !important` : props.theme.colors.base.white };
+  border-bottom-color: ${ props => props.active ? props.theme.colors.base.white : 'transparent' } !important;
   
-  ${ props => transitions(`color ${props.theme.variables.animation.speed}`) };
-  
-  border-bottom: ${ props => props.active ? `1px solid ${ props.theme.notifications.primary }` : 0 };
+  ${ props => transitions(`color ${props.theme.variables.animation.speed}`, `border-color ${props.theme.variables.animation.speed}`) };
   
   &:last-child {
     margin-right: 0;
-  }
-  
-  &:hover {
-    color: ${ props => props.color ? props.color : props.theme.notifications.primary };
   }
 `;
 

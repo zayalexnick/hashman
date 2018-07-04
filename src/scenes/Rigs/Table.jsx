@@ -60,8 +60,7 @@ export default class extends Component
                                 label: 'Имя',
                                 index: 'Name',
                                 sorter: true,
-                                compare: (a, b) => a.Name.localeCompare(b.Name),
-                                render: (value, record) => <Link to={`/rig/${record.RigID}`}>{ value }</Link>
+                                compare: (a, b) => a.Name.localeCompare(b.Name)
                             },
                             {
                                 label: 'IP',
@@ -72,31 +71,32 @@ export default class extends Component
                             {
                                 label: 'Статус',
                                 index: 'StateStr',
-                                render: (value, record) => <Tag type={typeFromNumber(record.StateStrT)}>{ value }</Tag>,
+                                render: (value, record) => <Tag type="hidden">{ value }</Tag>,
                                 filtered: true
                             },
                             {
                                 label: 'Режим',
                                 index: 'RunMode',
-                                render: (value, record) => <Tag type={typeFromNumber(record.RunModeT)}>{ value }</Tag>,
+                                render: (value, record) => <Tag type="hidden">{ value }</Tag>,
                                 filtered: true
                             },
                             {
                                 label: 'Температура',
                                 index: 'MaxTemp',
-                                render: (value, record) => <Tag type={typeFromNumber(record.MaxTempT)}>{ temperature(value) }</Tag>,
+                                render: (value, record) => <Tag type="hidden">{ temperature(value) }</Tag>,
                                 sorter: true
                             },
                             {
                                 label: 'Хэшрейт',
                                 index: 'Hashrate',
-                                render: (value, record) => <Tag type={typeFromNumber(record.HashrateT)}>{ hashrate(value) }</Tag>,
+                                render: (value, record) => <Tag type="hidden">{ hashrate(value) }</Tag>,
                                 sorter: true,
                                 compare: (a, b) => a.Hashrate - b.Hashrate
                             },
                         ]}
                         dataSource={rigs.entities[0].Rigs}
                         pagination={true}
+						onRowClick={(record) => this.props.history.push(`/rig/${record.RigID}`)}
                     />
                 ) : null }
             </LoaderContainer>

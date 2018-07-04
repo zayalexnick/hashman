@@ -27,6 +27,8 @@ import typeFromNumber from '~/utils/typeFromNumber';
 import { Table } from '~/components/Table';
 import { Message } from '~/scenes/Events/styles';
 import HashrateChart from './charts/Hashrate';
+import { rgba } from 'polished';
+import _ from "lodash";
 
 const Settings = ({ rig }) => (
     <Buttons>
@@ -88,7 +90,8 @@ const TooltipHashrate = (props) => (
 export default class extends Component
 {
     state = {
-        update: null
+        update: null,
+		activeChart: null
     };
 
     componentDidMount()
@@ -118,13 +121,34 @@ export default class extends Component
                 <ResponsiveContainer key={index} width="100%" height={80}>
                     <LineChart data={this.props.rig.charts.Hashrate[chart]}>
                         <Tooltip content={<TooltipHashrate />} />
-                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={theme.notifications.error} />
+                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={this.state.activeChart === 'hashrate' ? theme.notifications.primary : theme.notifications.hidden} />
                     </LineChart>
                 </ResponsiveContainer>
             )
         }));
         return charts;
     };
+
+	getCurrentTemperature = () => {
+		let arr = [];
+
+		const getType = (item) => {
+			switch (item)
+			{
+				case 'GPU': return 'warning';
+				case 'ASIC': return 'primary';
+				case 'В помещении': return 'success';
+				default: return 'default';
+			}
+		};
+
+		if (Object.keys(this.props.rig.charts).length > 0)
+			Object.keys(this.props.rig.charts.currentTemperatures).map((item, index) =>
+				arr.push(<Tag type={this.state.activeChart === 'temperature' ? getType(item) : 'hidden'} key={index}>{ item }: { temperature(this.props.rig.charts.currentTemperatures[item]) }</Tag>)
+			);
+
+		return arr;
+	};
 
     getInfoChart = (chart) => {
         let newChart = [];
@@ -135,6 +159,104 @@ export default class extends Component
 
         return newChart;
     };
+
+    getSettings = () => {
+    	const items = [];
+    	const group = {};
+
+		_.map(this.props.rig.entities.Config, (item) => {
+			if (!group[item.Group]) group[item.Group] = [];
+			group[item.Group].push(item);
+		});
+
+		return group;
+	};
+
+    getStatic = () => {
+    	const group = {};
+
+    	group['Оборудование'] = [];
+    	group['Состояние'] = [];
+    	group['Параметры'] = [];
+
+    	group['Оборудование'].push({
+			Description: 'Материнская плата',
+			Value: this.props.rig.entities.Mainboard,
+			Miners: null
+		});
+    	group['Оборудование'].push({
+			Description: 'Процессор',
+			Value: this.props.rig.entities.CPU,
+			Miners: null
+		});
+    	group['Оборудование'].push({
+			Description: 'Оперативная память',
+			Value: memory(this.props.rig.entities.RAM),
+			Miners: null
+		});
+    	group['Оборудование'].push({
+			Description: 'GPU',
+			Value: this.props.rig.entities.Driver + ' ' + this.props.rig.entities.GpuCount + 'шт.',
+			Miners: null
+		});
+
+
+    	group['Состояние'].push({
+			Description: '',
+			Value: this.props.rig.entities.IsOnline ? <Tag type="success">в сети</Tag> : <Tag type="error">в сети</Tag>,
+			Miners: null
+		});
+    	group['Состояние'].push({
+			Description: 'Состояние',
+			Value: <div>{ this.props.rig.entities.IsMining ? <span style={{ color: theme.notifications.success }}>Майнинг</span> : <span style={{ color: theme.notifications.error }}>Простой</span> } <Tag type="hidden">{ moment.duration(this.props.rig.entities.miningTime).humanize() }</Tag></div>,
+			Miners: null
+		});
+    	group['Состояние'].push({
+			Description: 'Статус',
+			Value: <div>{ this.props.rig.entities.StateStr } <Tag type="hidden">{ moment.duration(this.props.rig.entities.stateTime).humanize() }</Tag></div>,
+			Miners: null
+		});
+    	group['Состояние'].push({
+			Description: 'Скорость',
+			Value: hashrate(this.props.rig.entities.HashRate),
+			Miners: null
+		});
+    	group['Состояние'].push({
+			Description: this.props.rig.entities.IsOnline ? 'Uptime' : 'Downtime',
+			Value: moment.duration(this.props.rig.entities.IsOnline ? this.props.rig.entities.Uptime : this.props.rig.entities.downtime).humanize(),
+			Miners: null
+		});
+
+
+
+    	group['Параметры'].push({
+			Description: 'IP',
+			Value: this.props.rig.entities.ip,
+			Miners: null
+		});
+    	group['Параметры'].push({
+			Description: 'Pool',
+			Value: this.props.rig.entities.Pool,
+			Miners: null
+		});
+    	group['Параметры'].push({
+			Description: 'Режим',
+			Value: this.props.rig.entities.RunMode,
+			Miners: null
+		});
+    	group['Параметры'].push({
+			Description: 'Coin',
+			Value: this.props.rig.entities.Coin,
+			Miners: null
+		});
+    	group['Параметры'].push({
+			Description: 'Кошелек',
+			Value: this.props.rig.entities.Wallet,
+			Miners: null
+		});
+
+    	return group;
+	};
 
     render()
     {
@@ -150,33 +272,29 @@ export default class extends Component
 					<Col xs={12} md={6} lg={3}>
 						<Paper title="Стабильность" loading={Object.keys(rig.charts).length === 0} subes={[
 							<Tag type={ entities.IsOnline ? 'success' : 'error' }>{ time.humanize(false) }</Tag>,
-						]}>
+						]} onMouseEnter={(e) => this.setState({ activeChart: 'stability' })} onMouseLeave={() => this.setState({ activeChart: null })}>
 							<ResponsiveContainer width="100%" height={80}>
 								<BarChart data={rig.charts.Stability}>
 									<Tooltip content={<TooltipStability />} />
-									<Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
-									<Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
+									<Bar dataKey="uptime" stackId="a" fill={this.state.activeChart === 'stability' ? theme.notifications.success : rgba(theme.notifications.hidden, 0.8)} />
+									<Bar dataKey="downtime" stackId="a" fill={this.state.activeChart === 'stability' ? theme.notifications.error : theme.notifications.hidden} />
 								</BarChart>
 							</ResponsiveContainer>
 						</Paper>
 					</Col>
 					<Col xs={12} md={6} lg={3}>
-						<Paper title="Хэшрейт" loading={Object.keys(rig.charts).length === 0}>
+						<Paper title="Хэшрейт" loading={Object.keys(rig.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'hashrate' })} onMouseLeave={() => this.setState({ activeChart: null })}>
 							{ Object.keys(rig.charts).length > 0 ? <Tabs items={this.hashrateCharts()} /> : null }
 						</Paper>
 					</Col>
 					<Col xs={12} md={6} lg={3}>
-						<Paper title="Температура" loading={Object.keys(rig.charts).length === 0} subes={[
-							<Tag type="success" key={1}>В помещении: { temperature(0) }</Tag>,
-							<Tag type="primary" key={2}>BTC: { temperature(65) }</Tag>,
-							<Tag type="error" key={3}>ETH: { temperature(78) }</Tag>
-						]}>
+						<Paper title="Температура" loading={Object.keys(rig.charts).length === 0} subes={this.getCurrentTemperature()} onMouseEnter={(e) => this.setState({ activeChart: 'temperature' })} onMouseLeave={() => this.setState({ activeChart: null })}>
 							<ResponsiveContainer width="100%" height={80}>
 								<LineChart data={rig.charts.Temperature}>
 									<Tooltip content={<TooltipTemperature />} />
-									<Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
-									<Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
-									<Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
+									<Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.success : theme.notifications.hidden} />
+									<Line dot={false} type='monotone' dataKey='GPU' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.warning : theme.notifications.hidden} />
+									<Line dot={false} type='monotone' dataKey='ASIC' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.primary : theme.notifications.hidden} />
 								</LineChart>
 							</ResponsiveContainer>
 						</Paper>
@@ -196,15 +314,87 @@ export default class extends Component
 
 				<Row>
                     <Col xs={12} lg={6}>
-                        <LoaderContainer loading={ entities === 0 }>
+						<Paper title="Характеристики" loading={entities === 0}>
 							{ Object.keys(entities).length > 0 ?
-								<Stat
+								<Tabs items={[
+									{
+										label: 'Параметры',
+										index: 0,
+										content: <Stat items={this.getStatic()} />
+									},
+									{
+										label: 'Настройки',
+										index: 1,
+										content: <Stat canReboot={entities.canReboot} canEdit={entities.canEdit} items={this.getSettings()} />
+									},
+								]} />
+							: null }
+						</Paper>
+                    </Col>
+					{/*<Stat
 									ids={[entities.RigID]}
 									title="Характеристики"
 									items={entities.Config}
 									canReboot={entities.canReboot}
 									canEdit={entities.canEdit}
 									advanced={[
+										{
+											name: 'Состояние',
+											items: [
+												{
+													Name: 'State',
+													Description: '',
+													Value:
+														entities.IsOnline ?
+															<div style={{color: theme.notifications.success}}>В сети</div> :
+															<div style={{color: theme.notifications.error}}>Оффлайн</div>
+													,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'Status',
+													Description: 'Состояние',
+													Value:
+														<div>
+															<div>
+																{ entities.IsMining ?
+																	<span style={{color: theme.notifications.success}}>Майнинг</span> :
+																	<span style={{color: theme.notifications.error}}>Простой</span>
+																}
+																<Tag type="hidden">{ moment.duration(entities.miningTime, 'seconds').humanize() }</Tag>
+															</div>
+														</div>,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'StateStr',
+													Description: 'Статус',
+													Value: <div>
+														<span style={{color: theme.notifications.hidden}}>{ entities.StateStr }</span>
+														<Tag type="hidden">{ moment.duration(entities.stateTime, 'seconds').humanize() }</Tag>
+													</div>,
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'Speed',
+													Description: 'Скорость',
+													Value: hashrate(entities.HashRate),
+													readOnly: true,
+													Miners: null
+												},
+												{
+													Name: 'State',
+													Description: entities.IsOnline ? 'Uptime' : 'Downtime',
+													Value: time.humanize(false),
+													readOnly: true,
+													Miners: null
+												},
+											]
+
+										},
 										{
 											name: 'Оборудование',
 											items: [
@@ -237,42 +427,6 @@ export default class extends Component
 													Miners: null
 												},
 											]
-										},
-										{
-											name: 'Состояние',
-											items: [
-												{
-													Name: 'Status',
-													Description: 'Состояние',
-													Value: entities.IsOnline ?
-														<div style={{ color: theme.notifications.success }}>в сети</div> :
-														<div style={{ color: theme.notifications.error }}>офлайн</div>,
-													readOnly: true,
-													Miners: null
-												},
-												{
-													Name: 'StateStr',
-													Description: 'Статус',
-													Value: entities.StateStr,
-													readOnly: true,
-													Miners: null
-												},
-												{
-													Name: 'Speed',
-													Description: 'Скорость',
-													Value: hashrate(entities.HashRate),
-													readOnly: true,
-													Miners: null
-												},
-												{
-													Name: 'State',
-													Description: entities.IsOnline ? 'Uptime' : 'Downtime',
-													Value: time.humanize(false),
-													readOnly: true,
-													Miners: null
-												},
-											]
-
 										},
 										{
 											name: 'Параметры',
@@ -315,10 +469,7 @@ export default class extends Component
 											]
 										}
 									]}
-								/>
-							: null }
-                        </LoaderContainer>
-                    </Col>
+								/>*/}
                     <Col xs={12} lg={6}>
                         <Paper title="События" loading={rig.events.length === 0}>
                             <Table

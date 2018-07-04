@@ -12,7 +12,7 @@ export default styled.span`
   padding: 4px 7px;
 
   font-size: ${ rem('12px') };
-  font-weight: bold;
+  font-weight: ${ props => props.type === 'error' ? 'bold' : 300 } !important;
   color: ${ props => props.type ? props.theme.notifications[props.type] : props.theme.colors.base.black };
   
   white-space: nowrap;

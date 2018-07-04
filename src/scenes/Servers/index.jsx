@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { ResponsiveContainer, LineChart, BarChart, Line, Bar, Tooltip } from 'recharts';
 import moment from 'moment'
 import * as actions from './actions';
@@ -18,12 +18,14 @@ import hashrate from '~/utils/hashrate';
 import typeFromNumber from '~/utils/typeFromNumber';
 import Event from '~/components/Event';
 import theme from '~/theme';
+import { rgba } from 'polished';
+import wallet from '~/utils/wallet';
 
 const TooltipStability = (props) => (
     <ToolTip.Container>
         { props.payload.length > 0 ? (
             <ToolTip.Content>
-                <ToolTip.Date>{ moment(props.payload[0].payload.date).format('L LT') }</ToolTip.Date>
+                <ToolTip.Date>{ moment(props.payload[0].payload.date).format('L') }</ToolTip.Date>
                 { props.payload.map((item, index) => (
                     <ToolTip.Item key={index} color={item.color}>
                         <ToolTip.Name>{ item.name }</ToolTip.Name>
@@ -70,10 +72,12 @@ const TooltipHashrate = (props) => (
 @connect((state) => ({
     servers: state.servers
 }), actions)
+@withRouter
 export default class extends Component
 {
     state = {
-        update: null
+        update: null,
+		activeChart: null
     };
 
     async componentDidMount()
@@ -140,13 +144,13 @@ export default class extends Component
     hashrateCharts = () => {
         let charts = [];
         Object.keys(this.props.servers.charts.Hashrate).map((chart) => charts.push({
-            label: `${chart}: ${hashrate(this.props.servers.charts.currentHashrate[chart])}`,
+            label: chart,
             index: chart,
             content: (
                 <ResponsiveContainer width="100%" height={80}>
                     <LineChart data={this.props.servers.charts.Hashrate[chart]}>
                         <Tooltip content={<TooltipHashrate />} />
-                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={theme.notifications.error} />
+                        <Line dot={false} type='monotone' dataKey='value' strokeWidth={2} stroke={this.state.activeChart === 'hashrate' ? theme.notifications.primary : theme.notifications.hidden} />
                     </LineChart>
                 </ResponsiveContainer>
             )
@@ -160,8 +164,8 @@ export default class extends Component
         const getType = (item) => {
             switch (item)
             {
-                case 'ETH': return 'error';
-                case 'BTC': return 'primary';
+                case 'GPU': return 'warning';
+                case 'ASIC': return 'primary';
                 case 'В помещении': return 'success';
                 default: return 'default';
             }
@@ -169,7 +173,7 @@ export default class extends Component
 
         if (Object.keys(this.props.servers.charts).length > 0)
             Object.keys(this.props.servers.charts.currentTemperatures).map((item, index) =>
-                arr.push(<Tag type={getType(item)} key={index}>{ item }: { temperature(this.props.servers.charts.currentTemperatures[item]) }</Tag>)
+                arr.push(<Tag type={this.state.activeChart === 'temperature' ? getType(item) : 'hidden'} key={index}>{ item }: { temperature(this.props.servers.charts.currentTemperatures[item]) }</Tag>)
             );
 
         return arr;
@@ -185,39 +189,38 @@ export default class extends Component
                 <Row>
                     <Col xs={12} md={6} lg={3}>
                         <Paper title="Стабильность" loading={Object.keys(servers.charts).length === 0} subes={[
-                            <Tag type="primary" key={1}>Всего: {this.getInfo().RigsTotal}</Tag>,
-                            <Tag type="success" key={2}>Онлайн: {this.getInfo().RigsOnline}</Tag>,
-                            <Tag type="warning" key={3}>С ошибками: {this.getInfo().RigsWarning}</Tag>,
-                            <Tag type="error" key={4}>Нерабочие: {this.getInfo().RigsOffline}</Tag>,
-                        ]}>
-                            <ResponsiveContainer width="100%" height={80}>
+							<div><Tag type={this.state.activeChart === 'stability' ? 'primary' : 'hidden'} key={1}>Всего: {this.getInfo().RigsTotal}</Tag></div>,
+                            <Tag type={this.state.activeChart === 'stability' ? 'success' : 'hidden'} key={2}>Онлайн: {this.getInfo().RigsOnline}</Tag>,
+                            <Tag type={this.getInfo().RigsError > 0 || this.state.activeChart === 'stability' ? 'error' : 'hidden'} key={4}>Нерабочие: {this.getInfo().RigsError}</Tag>,
+                        ]} onMouseEnter={(e) => this.setState({ activeChart: 'stability' })} onMouseLeave={() => this.setState({ activeChart: null })}>
+                            <ResponsiveContainer width="100%" height={110}>
                                 <BarChart data={servers.charts.Stability}>
                                     <Tooltip content={<TooltipStability />} />
-                                    <Bar dataKey="uptime" stackId="a" fill={theme.notifications.success} />
-                                    <Bar dataKey="downtime" stackId="a" fill={theme.notifications.error} />
+                                    <Bar dataKey="uptime" stackId="a" fill={this.state.activeChart === 'stability' ? theme.notifications.success : rgba(theme.notifications.hidden, 0.6)} />
+                                    <Bar dataKey="downtime" stackId="a" fill={this.state.activeChart === 'stability' ? theme.notifications.error : theme.notifications.hidden} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Хэшрейт" loading={Object.keys(servers.charts).length === 0}>
+						<Paper title="Хэшрейт" loading={Object.keys(servers.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'hashrate' })} onMouseLeave={() => this.setState({ activeChart: null })} subes={Object.keys(servers.charts).length !== 0 ? Object.keys(servers.charts.currentHashrate).map((current) => <Tag type="hidden">{ `${current}: ${hashrate(servers.charts.currentHashrate[current])}` }</Tag>) : null }>
                             { Object.keys(servers.charts).length > 0 ? <Tabs items={this.hashrateCharts()} /> : null }
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="Температура" loading={Object.keys(servers.charts).length === 0} subes={this.getCurrentTemperature()}>
-                            <ResponsiveContainer width="100%" height={80}>
+                        <Paper title="Температура" loading={Object.keys(servers.charts).length === 0} subes={this.getCurrentTemperature()} onMouseEnter={(e) => this.setState({ activeChart: 'temperature' })} onMouseLeave={() => this.setState({ activeChart: null })}>
+                            <ResponsiveContainer width="100%" height={110}>
                                 <LineChart data={servers.charts.Temperature}>
                                     <Tooltip content={<TooltipTemperature />} />
-                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={theme.notifications.success} />
-                                    <Line dot={false} type='monotone' dataKey='BTC' strokeWidth={2} stroke={theme.notifications.primary} />
-                                    <Line dot={false} type='monotone' dataKey='ETH' strokeWidth={2} stroke={theme.notifications.error} />
+                                    <Line dot={false} type='monotone' dataKey='В Помещении' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.success : theme.notifications.hidden} />
+                                    <Line dot={false} type='monotone' dataKey='GPU' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.warning : theme.notifications.hidden} />
+                                    <Line dot={false} type='monotone' dataKey='ASIC' strokeWidth={2} stroke={this.state.activeChart === 'temperature' ? theme.notifications.primary : theme.notifications.hidden} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </Paper>
                     </Col>
                     <Col xs={12} md={6} lg={3}>
-                        <Paper title="События" loading={Object.keys(servers.charts).length === 0}>
+                        <Paper title="События" loading={Object.keys(servers.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'events' })} onMouseLeave={() => this.setState({ activeChart: null })}>
                             {Object.keys(servers.charts).length > 0 ? (
                                 servers.charts.Events.map((item, index) => (
                                     <Event key={index} type={typeFromNumber(item.MessageT)}>
@@ -230,49 +233,56 @@ export default class extends Component
                 </Row>
                 <Paper title="Текущие фермы">
                     <LoaderContainer loading={servers.entities.length === 0}>
-                        <Table
+                        <Table onClick={(e) => console.log(e)}
                             columns={[
-                                {
-                                    label: 'ID',
-                                    index: 'ServerID',
-                                    sorter: true, compare: (a, b) => a.id - b.id
-                                },
                                 {
                                     label: 'Сервер',
                                     index: 'ServerName',
-                                    render: (value, record) => <Link to={`/rigs/${record.ServerID}`}>{value}</Link>,
-                                    sorter: true, compare: (a, b) => a.ServerName.localeCompare(b.ServerName)
+                                    sorter: true, compare: (a, b) => a.ServerName.localeCompare(b.ServerName),
+									render: (value, record) => (
+										<div>
+											{ value } <Tag type="hidden">({ record.RigsTotal })</Tag>
+										</div>
+									)
                                 },
                                 {
-                                    label: 'Температура',
-                                    index: 'MaxTemp',
-                                    render: (value, record) => <Group>{record.Coins.map((coin, index) => (<Tag type={typeFromNumber(coin.MaxTempT)} key={index}>{coin.Coin}: {temperature(coin.MaxTemp)}</Tag>))}</Group>
+                                    label: 'Температура (GPU)',
+                                    index: 'GPUTemp',
+                                    render: (value, record) => value === 0 ? '---' : <Tag type={record.GPUTempT === 3 ? 'error' : 'hidden'}>{ value === 0 ? '---' : temperature(value)}</Tag>
+                                },
+                                {
+                                    label: 'Температура (ASIC)',
+                                    index: 'ASICTemp',
+                                    render: (value, record) => <Tag type={record.ASICTempT === 3 ? 'error' : 'hidden'}>{ value === 0 ? '---' : temperature(value)}</Tag>
                                 },
                                 {
                                     label: 'В помещении',
                                     index: 'Temperature',
-                                    render: (value) => temperature(value)
+									render: (value) => <Tag type='hidden'>{ value === 0 ? '---' : temperature(value)}</Tag>
                                 },
                                 {
                                     label: 'Хэшрейт',
                                     index: 'Hashrate',
-                                    render: (value, record) => <Group>{record.Coins.map((coin, index) => (<Tag type={typeFromNumber(coin.hashrateT)} key={index}>{coin.Coin}: {hashrate(coin.hashrate)}</Tag>))}</Group>
+                                    render: (value, record) => <Group>{record.Coins.map((coin, index) => (<Tag type="hidden" key={index}>{coin.Coin}: {hashrate(coin.hashrate)}</Tag>))}</Group>
                                 },
                                 {
-                                    label: 'Риги',
-                                    index: 'RigsTotal',
+                                    label: 'Доходность',
+                                    index: 'Income',
+                                    render: (value, record) => wallet(record.Coins.reduce((accumulator, value) => accumulator + value.daylyIncome, 0))
+                                },
+                                {
+                                    label: 'Статус',
+                                    index: 'RigsError',
                                     render: (value, record) => (
-                                        <Group inline>
-                                            <Tag type="primary">{ record.RigsTotal }</Tag>
-                                            <Tag type="success">{ record.RigsOnline }</Tag>
-                                            <Tag type="warning">{ record.RigsWarning }</Tag>
-                                            <Tag type="error">{ record.RigsError }</Tag>
-                                            <Tag type="default">{ record.RigsOffline }</Tag>
-                                        </Group>
+                                    	<div>
+											{ record.RigsError === 0 ? <Tag type="hidden">ОК</Tag> : <Tag type={record.RigsError > 0 ? 'error' : 'hidden'}>Нерабочие: { record.RigsError }</Tag> }
+										</div>
+
                                     )
                                 },
                             ]}
                             dataSource={servers.entities}
+						    onRowClick={(record) => this.props.history.push(`/rigs/${record.ServerID}`)}
                         />
                     </LoaderContainer>
                 </Paper>

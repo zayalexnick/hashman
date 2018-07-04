@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs, Navigation, NavItem, Content } from './styles';
+import Button from '~/components/Button';
 
 export default class extends Component
 {
@@ -30,7 +31,7 @@ export default class extends Component
         return (
             <Tabs>
                 <Navigation>
-                    { items.map((item) => <NavItem color={color} key={item.index} active={this.state.current === item.index} onClick={() => this.clickHandler(item.index)}>{ item.label }</NavItem>) }
+                    { items.map((item) => <Button key={item.index} type={this.state.current === item.index ? 'primary' : 'hidden'} onClick={() => this.clickHandler(item.index)}>{ item.label }</Button>) }
                 </Navigation>
                 <Content key={this.state.current}>
                     { this.getCurrent() ? this.getCurrent().content : null }

@@ -4,11 +4,11 @@ export const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   
-  margin: 0 -20px;
+  margin: 0 -10px;
 `;
 
 export const Col = styled.div`
-  padding: 0 20px;
+  padding: 0 10px;
   
   @media screen and (min-width: ${ props => props.theme.variables.breakpoints.xs })
   {

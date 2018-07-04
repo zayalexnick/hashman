@@ -21,7 +21,7 @@ export default class extends Component
     render()
     {
         return (
-            <Column ref={(ref) => this.element = ref}>{ this.props.render(this.props.record[this.props.index], this.props.record) }</Column>
+            <Column ref={(ref) => this.element = ref} { ...this.props }>{ this.props.render(this.props.record[this.props.index], this.props.record) }</Column>
         );
     }
 }
