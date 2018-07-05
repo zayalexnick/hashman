@@ -53,8 +53,7 @@ export default class extends Component<Props>
                 <Container hidden={hidden}>
                     <Content>
                         <Switch>
-							<Redirect from="/" to="/servers" />
-                            <Route exact path={`/servers`} component={ServersScreen} />
+                            <Route exact path={`/`} component={ServersScreen} />
                             <Route exact path={`/events`} component={EventsScreen} />
                             <Route exact path={`/rigs/:id`} component={RigsScreen} />
                             <Route exact path={`/rigs`} component={RigsScreen} />
