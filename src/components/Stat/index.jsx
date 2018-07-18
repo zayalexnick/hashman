@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Container, Content, Item, Title, Text, Buttons, Check, Error } from './styles';
+import { Container, Content, Item, Title, Text, Buttons, Check, Error, Different } from './styles';
 import Tabs from '~/components/Tabs';
 import Button from "~/components/Button";
 import { Toggle } from "~/components/Form";
+import { connect } from 'react-redux';
+import * as actions from '~/scenes/Rigs/actions';
 
+@connect((state) => ({
+	rigs: state.rigs
+}), actions)
 export default class extends Component
 {
 	static defaultProps = {
 		items: {},
 		editable: false,
 		canReboot: false,
-		canEdit: false
+		canEdit: false,
+		editMode: false
 	};
 
 	constructor(props, context)
@@ -21,7 +27,7 @@ export default class extends Component
 		this.state = {
 			items: this.props.items,
 			copy: this.props.items,
-			editMode: false
+			editMode: this.props.editMode
 		}
 	}
 
@@ -46,6 +52,30 @@ export default class extends Component
 		this.setState({ copy: { ...this.state.copy, [rootItem]: newGroup } });
 	};
 
+	reboot = async () => {
+		await this.props.reboot(this.props.ids);
+
+		if (this.props.rigs.error.code < 0) console.error('Reboot', this.props.rigs.error.message);
+		else console.warn('Reboot', 'OK');
+	};
+
+	edit = async () => {
+		const { copy } = this.state;
+
+		const result = [];
+
+		Object.keys(copy).map((group) => {
+			_.map(copy[group], (item) => {
+				result.push({ name: item.Name, value: item.Value, isEnabled: item.isEnabled });
+			})
+		});
+
+		await this.props.edit(this.props.ids, result);
+
+		if (typeof this.props.rigs.config === 'string') console.error('Edit', this.props.rigs.config);
+		else console.warn('Edit', 'OK');
+	};
+
 	getItems = () => {
 		const items = [];
 		_.map(Object.keys(this.state.copy), (item, index) =>
@@ -58,6 +88,7 @@ export default class extends Component
 							<Item key={subindex}>
 								<Title>{subitem.Description}</Title>
 								{ this.state.editMode ? this.renderEdit(subitem, item, subindex) : <Text>{subitem.Type === 'select' ? subitem.SelectParams[subitem.Value] :  subitem.Type === 'bool' ?  subitem.Value ? <Check /> : <Error /> : subitem.Value || '---'}</Text> }
+								{ subitem.isDifferent ? <Different>Настройки отличаются</Different> : null }
 							</Item>
 						: null)
 					}
@@ -65,9 +96,9 @@ export default class extends Component
 						<Item>
 							{ this.state.editMode ? (
 								<Buttons>
-									<Button type="success">Сохранить</Button>
-									{ this.props.canReboot ? <Button type="warning">Перезагрузить</Button> : null }
-									<Button type="error" onClick={() => this.setState({ editMode: !this.state.editMode  })}>Отмена</Button>
+									<Button type="success" onClick={this.edit}>Сохранить</Button>
+									{ this.props.canReboot ? <Button type="warning" onClick={this.reboot}>Перезагрузить</Button> : null }
+									<Button type="error" onClick={() => this.setState({ editMode: !this.state.editMode, copy: this.state.items })}>Отмена</Button>
 								</Buttons>
 							) : (
 								<Buttons>

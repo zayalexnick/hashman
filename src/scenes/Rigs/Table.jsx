@@ -11,6 +11,8 @@ import temperature from '~/utils/temperature';
 import typeFromNumber from '~/utils/typeFromNumber';
 import Button from "~/components/Button";
 import Stat from '~/components/Stat';
+import _ from "lodash";
+import Modal from '~/components/Modal';
 
 @hot(module)
 @connect((state) => ({
@@ -18,6 +20,12 @@ import Stat from '~/components/Stat';
 }), actions)
 export default class extends Component
 {
+	state = {
+		update: null,
+		editMode: false,
+		ids: []
+	};
+
     componentDidMount()
     {
         this.props.getRigs(this.props.server.ServerID);
@@ -34,6 +42,36 @@ export default class extends Component
         this.props.rigsClear();
     }
 
+	reboot = async (ids) => {
+		await this.props.reboot(ids);
+
+		if (this.props.rigs.error.code < 0) console.error('Reboot', this.props.rigs.error.message);
+		else console.warn('Reboot', 'OK');
+	};
+
+    edit = async (ids) => {
+    	clearInterval(this.state.update);
+
+		await this.props.getGConfig(ids);
+		this.openStat(ids);
+	};
+
+    openStat = (ids) => {
+    	this.setState({ editMode: true, ids });
+	};
+
+	getSettings = () => {
+		const items = [];
+		const group = {};
+
+		_.map(this.props.rigs.gconfig, (item) => {
+			if (!group[item.Group]) group[item.Group] = [];
+			group[item.Group].push(item);
+		});
+
+		return group;
+	};
+
     render()
     {
         const { rigs } = this.props;
@@ -46,8 +84,8 @@ export default class extends Component
 						footer={(props) =>
 								(
 									<div style={{ display: 'flex' }}>
-										<Button disabled={props.selectedColumns.length === 0} type="primary">Редактировать</Button>
-										<Button disabled={props.selectedColumns.length === 0} type="warning">Перезагрузить</Button>
+										<Button disabled={props.selectedColumns.length === 0} type="primary" onClick={() => this.edit(props.selectedColumns)}>Редактировать</Button>
+										<Button disabled={props.selectedColumns.length === 0} type="warning" onClick={() => this.reboot(props.selectedColumns)}>Перезагрузить</Button>
 									</div>
 								)
 						}
@@ -99,6 +137,7 @@ export default class extends Component
 						onRowClick={(record) => this.props.history.push(`/rig/${record.RigID}`)}
                     />
                 ) : null }
+				{ this.state.editMode ? <Modal unMount={() => this.setState({ editMode: false })} loading={this.props.rigs.pending.loading}><Stat editMode canReboot={rigs.entities.canReboot} canEdit={rigs.entities.canEdit} ids={this.state.ids} items={this.getSettings()} /></Modal> : null }
             </LoaderContainer>
         );
     }

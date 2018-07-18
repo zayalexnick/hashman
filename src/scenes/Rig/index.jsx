@@ -325,7 +325,7 @@ export default class extends Component
 									{
 										label: 'Настройки',
 										index: 1,
-										content: <Stat canReboot={entities.canReboot} canEdit={entities.canEdit} items={this.getSettings()} />
+										content: <Stat canReboot={entities.canReboot} canEdit={entities.canEdit} ids={[this.props.match.params.id]} items={this.getSettings()} />
 									},
 								]} />
 							: null }

@@ -227,6 +227,10 @@ export default class extends Component // TODO Сделать сортировк
 
 	};
 
+    reboot = async () => {
+
+	};
+
     render()
     {
         const { columns, dataSource, copySource, currentPage, countPerPage, pagination, selected, selectedColumns } = this.state;

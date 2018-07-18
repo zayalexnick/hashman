@@ -9,6 +9,8 @@ export const rigsFailed = createAction('[RIGS] Failed');
 export const rigsSuccessed = createAction('[RIGS] Successed');
 export const rigsClear = createAction('[RIGS] Clear');
 export const rigsCharts = createAction('[RIGS] Charts');
+export const rigsGConfig = createAction('[RIGS] GConfig');
+export const rigsConfig = createAction('[RIGS] Config');
 
 export const getRigs = (id) => async (dispatch) => {
     try
@@ -43,6 +45,69 @@ export const getCharts = (id) => async (dispatch) => {
             dispatch(rigsFailed({ code: data.ErrorCode, message: data.ErrorString }));
         else
             dispatch(rigsCharts(data.Data));
+    }
+    catch (e)
+    {
+        dispatch(rigsFailed({ code: null, message: e }));
+    }
+    finally
+    {
+        dispatch(rigsReceived());
+    }
+};
+
+export const reboot = (ids) => async (dispatch) => {
+    try
+    {
+        dispatch(rigsRequested());
+
+        const { data }: { data: IResult } = await api.post(`/api/reboot`, ids);
+
+        if (data.ErrorCode < 0)
+            dispatch(rigsFailed({ code: data.ErrorCode, message: data.ErrorString }));
+    }
+    catch (e)
+    {
+        dispatch(rigsFailed({ code: null, message: e }));
+    }
+    finally
+    {
+        dispatch(rigsReceived());
+    }
+};
+
+export const edit = (ids, result) => async (dispatch) => {
+    try
+    {
+        dispatch(rigsRequested());
+
+        const { data }: { data: IResult } = await api.post(`/api/config`, { rigs: ids, Configs: result });
+
+        if (data.ErrorCode < 0)
+            dispatch(rigsConfig(data.ErrorString));
+        else rigsConfig(true);
+    }
+    catch (e)
+    {
+        dispatch(rigsConfig(message: e));
+    }
+    finally
+    {
+        dispatch(rigsReceived());
+    }
+};
+
+export const getGConfig = (ids) => async (dispatch) => {
+    try
+    {
+        dispatch(rigsRequested());
+
+        const { data }: { data: IResult } = await api.post(`/api/gconfig`, { rigs: ids });
+
+        if (data.ErrorCode < 0)
+            dispatch(rigsConfig({ code: data.ErrorCode, message: data.ErrorString }));
+        else
+        	dispatch(rigsGConfig(data.Data));
     }
     catch (e)
     {

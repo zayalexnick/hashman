@@ -14,7 +14,7 @@ export default class extends Component
 
     componentDidMount()
     {
-        this.setState({ current: parseInt(this.props.activeItem) || this.props.items[0].index });
+        this.setState({ current: parseInt(this.props.activeItem) || this.props.items[0].index || 0 });
     }
 
     clickHandler = (index) => {

@@ -150,3 +150,9 @@ export const EnabledLabel = styled.span`
 	
 	font-size: ${ rem('13px') };
 `;
+
+export const Different = styled.p`
+	color: ${ props => props.theme.notifications.warning };
+	font-size: ${ rem('12px') };
+	margin-top: 5px;
+`;

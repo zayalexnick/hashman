@@ -21,6 +21,15 @@ import * as ToolTip from '~/components/ToolTip';
 import theme from '~/theme';
 import { rgba } from 'polished';
 
+class List
+{
+	static isList = (verifiable) => verifiable instanceof List;
+
+	static of = (...elements) => [ ...elements ];
+}
+
+console.log('List', List.of(1, 3, {x:4}, [5], '6'));
+
 const TooltipStability = (props) => (
     <ToolTip.Container>
         { props.payload.length > 0 ? (
