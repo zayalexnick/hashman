@@ -14,7 +14,7 @@ export const getServers = () => async (dispatch) => {
     {
         dispatch(serversRequested());
 
-        const { data }: { data: IResult } = await api.get('/api/servers');
+        const { data }: { data: IResult } = await api.get('/api/react/servers');
 
         if (data.ErrorCode < 0)
             dispatch(serversFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -36,7 +36,7 @@ export const getCharts = () => async (dispatch) => {
     {
         dispatch(serversRequested());
 
-        const { data }: { data:IResult } = await api.get('/api/infographs');
+        const { data }: { data:IResult } = await api.get('/api/react/infographs');
 
         if (data.ErrorCode < 0)
             dispatch(serversFailed({ code: data.ErrorCode, message: data.ErrorString }));

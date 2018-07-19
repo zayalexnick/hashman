@@ -77,13 +77,16 @@ export default class extends Component
 {
     state = {
         update: null,
-		activeChart: null
+		activeChart: null,
+		showCharts: true
     };
 
     async componentDidMount()
     {
         this.props.getServers();
-        this.props.getCharts();
+        await this.props.getCharts();
+
+        if (this.props.servers.error.message === 'NOT DATA') this.setState({ showCharts: false });
 
         this.setState({ update: setInterval(() => {
             this.props.getServers();
@@ -185,8 +188,10 @@ export default class extends Component
 
         return (
             <div>
-                <Title>Фермы</Title>
-                <Row>
+                <Title>Контрольная панель</Title>
+				{
+					this.state.showCharts ?
+				<Row>
                     <Col xs={12} md={6} lg={3}>
                         <Paper title="Стабильность" loading={Object.keys(servers.charts).length === 0} subes={[
 							<div><Tag type={this.state.activeChart === 'stability' ? 'primary' : 'hidden'} key={1}>Всего: {this.getInfo().RigsTotal}</Tag></div>,
@@ -231,7 +236,8 @@ export default class extends Component
                         </Paper>
                     </Col>
                 </Row>
-                <Paper title="Текущие фермы">
+				: null }
+                <Paper title="Фермы">
                     <LoaderContainer loading={servers.entities.length === 0}>
                         <Table onClick={(e) => console.log(e)}
                             columns={[

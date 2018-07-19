@@ -13,6 +13,7 @@ import Button from "~/components/Button";
 import Stat from '~/components/Stat';
 import _ from "lodash";
 import Modal from '~/components/Modal';
+import { Message as MessageStat } from '~/components/Stat/styles';
 
 @hot(module)
 @connect((state) => ({
@@ -23,13 +24,22 @@ export default class extends Component
 	state = {
 		update: null,
 		editMode: false,
-		ids: []
+		ids: [],
+		messageType: null,
+		showMessage: false,
+		message: '',
+		messageDelay: null,
 	};
 
-    componentDidMount()
+    async componentDidMount()
     {
         this.props.getRigs(this.props.server.ServerID);
-        this.props.getCharts(this.props.server.ServerID);
+        await this.props.getCharts(this.props.server.ServerID);
+
+        if (this.props.rigs.error.message === 'NOT DATA') {
+        	this.props.showCharts();
+		}
+
         this.setState({ update: setInterval(() => {
             this.props.getRigs(this.props.server.ServerID);
             this.props.getCharts(this.props.server.ServerID);
@@ -40,13 +50,26 @@ export default class extends Component
     {
         clearInterval(this.state.update);
         this.props.rigsClear();
+        console.log('UNMOUNT');
     }
 
-	reboot = async (ids) => {
-		await this.props.reboot(ids);
+	_showMessage = (type, message) => {
+		clearTimeout(this.state.messageDelay);
+		this.setState({ messageType: type, showMessage: true, message });
 
-		if (this.props.rigs.error.code < 0) console.error('Reboot', this.props.rigs.error.message);
-		else console.warn('Reboot', 'OK');
+		this.setState({ messageDelay: setTimeout(() => this.setState({ showMessage: false }), 10000) });
+	};
+
+	reboot = async (ids) => {
+		if(confirm('Вы действительно хотите изменить и перезапустить выбранные устройства?')) {
+			this.setState({showMessage: false});
+			await this.props.reboot(ids);
+
+			if (typeof this.props.rigs.config === 'string')
+				this._showMessage('error', this.props.rigs.config);
+			else
+				this._showMessage('success', 'Успешно перезагружено');
+		}
 	};
 
     edit = async (ids) => {
@@ -72,6 +95,33 @@ export default class extends Component
 		return group;
 	};
 
+	editDisabled = (tableProps) => {
+		if (tableProps.selectedColumns.length === 0) return true;
+
+		let i = 0;
+
+		_.map(tableProps.copySource, (item) => {
+			console.log(item, tableProps.selectedColumns);
+			if (tableProps.selectedColumns.includes(item.RigID) && item.canEdit) i++;
+		});
+
+		console.log(i);
+
+		return i !== tableProps.selectedColumns.length;
+	};
+
+	rebootDisabled = (tableProps) => {
+		if (tableProps.selectedColumns.length === 0) return true;
+
+		let i = false;
+
+		_.map(tableProps.copySource, (item) => {
+			if (tableProps.selectedColumns.includes(item.RigID) && item.canReboot) i = true;
+		});
+
+		return !i;
+	};
+
     render()
     {
         const { rigs } = this.props;
@@ -84,8 +134,8 @@ export default class extends Component
 						footer={(props) =>
 								(
 									<div style={{ display: 'flex' }}>
-										<Button disabled={props.selectedColumns.length === 0} type="primary" onClick={() => this.edit(props.selectedColumns)}>Редактировать</Button>
-										<Button disabled={props.selectedColumns.length === 0} type="warning" onClick={() => this.reboot(props.selectedColumns)}>Перезагрузить</Button>
+										<Button disabled={this.editDisabled(props)} type="primary" onClick={() => this.edit(props.selectedColumns)}>Редактировать</Button>
+										<Button disabled={this.rebootDisabled(props)} type="warning" onClick={() => this.reboot(props.selectedColumns)}>Перезагрузить</Button>
 									</div>
 								)
 						}
@@ -131,13 +181,20 @@ export default class extends Component
                                 sorter: true,
                                 compare: (a, b) => a.Hashrate - b.Hashrate
                             },
+                            {
+                                label: 'Coin',
+                                index: 'Coin',
+                                filtered: true
+                            },
+
                         ]}
                         dataSource={rigs.entities[0].Rigs}
                         pagination={true}
 						onRowClick={(record) => this.props.history.push(`/rig/${record.RigID}`)}
                     />
                 ) : null }
-				{ this.state.editMode ? <Modal unMount={() => this.setState({ editMode: false })} loading={this.props.rigs.pending.loading}><Stat editMode canReboot={rigs.entities.canReboot} canEdit={rigs.entities.canEdit} ids={this.state.ids} items={this.getSettings()} /></Modal> : null }
+				{ this.state.editMode ? <Modal unMount={() => this.setState({ editMode: false })} loading={this.props.rigs.pending.loading}><Stat editMode canReboot={rigs.entities.canReboot} canEdit={rigs.entities.canEdit} ids={this.state.ids} items={this.getSettings()} onCancel={() => this.setState({ editMode: false })} /></Modal> : null }
+				{ this.state.showMessage ? <MessageStat type={this.state.messageType}>{ this.state.message }</MessageStat> : null }
             </LoaderContainer>
         );
     }

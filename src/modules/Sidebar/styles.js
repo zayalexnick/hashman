@@ -66,7 +66,8 @@ export const Link = styled(NavLink)`
   text-decoration: none;
   
   color: ${ props => props.theme.colors.sidebar.link };
-  ${ props => transitions(`color ${props.theme.variables.animation.speed}`, `background-color ${props.theme.variables.animation.speed}`) }
+  ${ props => transitions(`color ${props.theme.variables.animation.speed}`, `background-color ${props.theme.variables.animation.speed}`) };
+  font-size: 13px;
   
   &:hover, &.active {
     color: ${ props=> props.theme.colors.base.white };

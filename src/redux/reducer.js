@@ -6,6 +6,7 @@ import serversReducer from '~/scenes/Servers/reducer';
 import eventsReducer from '~/scenes/Events/reducer';
 import rigsReducer from '~/scenes/Rigs/reducer';
 import rigReducer from '~/scenes/Rig/reducer';
+import reportsReducer from '~/scenes/Reports/reducer';
 
 export default combineReducers({
     sidebar: sidebarReducer,
@@ -13,5 +14,6 @@ export default combineReducers({
     servers: serversReducer,
     events: eventsReducer,
     rigs: rigsReducer,
-    rig: rigReducer
+    rig: rigReducer,
+	reports: reportsReducer
 });

@@ -5,6 +5,7 @@ import * as actions from './actions';
 import { hot } from 'react-hot-loader';
 
 import SignInScene from './SignIn';
+import SignUpScene from './Signup';
 
 import { Wrapper, Content, Logo } from "./styles";
 
@@ -32,7 +33,7 @@ export default class extends Component
                 <Content>
                     <Logo>Hashman</Logo>
                     <Switch>
-                        <Route path={`${path}`} component={SignInScene} />
+                        <Route path={`/auth`} component={SignInScene} />
                     </Switch>
                 </Content>
             </Wrapper>

@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import * as actions from '~/scenes/Auth/actions';
 import AppLoader from '~/modules/AppLoader';
 
+import DemoScene from '~/scenes/Demo';
 import AuthScene from '~/scenes/Auth';
+import SignupScene from '~/scenes/Auth/Signup';
 import DashboardScene from '~/scenes/Dashboard';
 
 type Props = {};
@@ -34,6 +36,8 @@ export default class extends Component<Props>
         return (
             <BrowserRouter>
                 <Switch>
+                    <Route path="/demo" component={DemoScene} />
+                    <Route path="/signup" component={SignupScene} />
                     <Route path="/auth" component={AuthScene} />
                     <Route path="/" component={DashboardScene} />
                 </Switch>

@@ -112,6 +112,7 @@ export const Table = styled.table`
 export const Row = styled.tr`
   word-break: normal;
 
+  ${ props => props.selected ? `background: ${ rgba(props.theme.colors.base.blue, 0.1) } !important` : null };
   ${ props => transitions(`background-color ${ props.theme.variables.animation.speed }`) };
   
   &:hover {

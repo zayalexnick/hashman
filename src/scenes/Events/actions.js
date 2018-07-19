@@ -14,7 +14,7 @@ export const getEvents = () => {
         try
         {
 			dispatch(eventsRequested());
-            const response = await api.get('/api/events');
+            const response = await api.get('/api/react/events');
             const result: IResult = response.data;
 
             if (result.ErrorCode < 0)

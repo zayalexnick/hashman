@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import { rem, transitions, rgba } from 'polished';
 import CheckIcon from 'react-icons/lib/fa/check';
 
-export const Input = styled.input`
+export const InputField = styled.input`
   padding: 12px 10px;
 
   font-size: ${ rem('13px') };
   color: ${ props => props.theme.colors.base.black };
 
-  border: 1px solid ${ props => props.theme.colors.form.input.border };
+  border: 1px solid ${ props => props.error ? props.theme.notifications.error : props.theme.colors.form.input.border };
   border-radius: 4px;
+  text-transform: none !important;
   
   background: none;
   
@@ -20,6 +21,22 @@ export const Input = styled.input`
     border-color: ${ props => props.theme.colors.form.input.focused };
   }
 `;
+
+export const InputError = styled.p`
+  margin-top: -10px;
+  margin-bottom: 20px;
+
+  font-size: ${ rem('11px') };
+  color: ${ props => props.theme.colors.notifications.error };
+  line-height: 1.3;
+`;
+
+export const Input = (props) => (
+	<div style={{ display: 'flex', flexDirection: 'column' }}>
+		<InputField validate={props.error} { ...props } />
+		{ props.error ? <InputError>{ props.error }</InputError> : null }
+	</div>
+);
 
 export const Label = styled.label`
   position: relative;
@@ -212,6 +229,7 @@ export class CheckBox extends Component
 				<CheckboxIcon checked={this.state.checked}>
 					<CheckIcon className="icon" />
 				</CheckboxIcon>
+				<input type="checkbox" checked={this.state.checked} onChange={(e) => this.props.onChange(e)} />
 				<input type="checkbox" checked={this.state.checked} onChange={(e) => this.props.onChange(e)} />
 			</CheckboxLabel>
 		);

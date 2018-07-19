@@ -12,9 +12,9 @@ export default new Config().extend('webpack/webpack.base.config.js').merge({
         host: '0.0.0.0',
         port: 1000,
         proxy: {
-            '/api': {
-                target: 'http://gpu.intelicom.ru/api/react',
-                pathRewrite: { '^/api': '' },
+            '/api/react': {
+                target: 'http://control.hashman.ru/api/react',
+                pathRewrite: { '^/api/react': '' },
                 secure: false,
                 changeOrigin: true
             }

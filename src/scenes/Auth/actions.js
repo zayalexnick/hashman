@@ -17,7 +17,7 @@ export const signin = ({ login, password }) => async (dispatch) => {
     {
         dispatch(authRequested());
 
-        const { data }: { data:IResult } = await api.post('/api/auth', { login, password });
+        const { data }: { data:IResult } = await api.post('/api/react/auth', { login, password });
 
         if (data.ErrorCode < 0)
             dispatch(authFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -37,10 +37,35 @@ export const signin = ({ login, password }) => async (dispatch) => {
     }
 };
 
+export const signup = ({ login, password, email }) => async (dispatch) => {
+	try
+	{
+		dispatch(authRequested());
+
+		const { data }: { data:IResult } = await api.post('/api/react/signup', { login, password, email });
+
+		if (data.ErrorCode < 0)
+			dispatch(authFailed({ code: data.ErrorCode, message: data.Data }));
+		else
+		{
+			localStorage.setItem('token', data.Data.XAuth);
+			api.defaults.headers['XAuth'] = data.Data.XAuth;
+			dispatch(authSuccessed(data.Data));
+		}
+	}
+	catch (e)
+	{
+		dispatch(authFailed({ code: null, message: e }));
+	}
+	finally {
+		dispatch(authRecieved());
+	}
+};
+
 export const checkAuth = () => async (dispatch) => {
     try
     {
-        const { data }: { data:IResult } = await api.get('/api/auth');
+        const { data }: { data:IResult } = await api.get('/api/react/auth');
 
         if (data.ErrorCode < 0)
             dispatch(authFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -57,5 +82,5 @@ export const checkAuth = () => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-    await api.get('/api/logoff');
+    await api.get('/api/react/logoff');
 };

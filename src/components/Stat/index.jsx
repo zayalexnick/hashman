@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Container, Content, Item, Title, Text, Buttons, Check, Error, Different } from './styles';
+import { Container, Content, Item, Title, Text, Buttons, Check, Error, Different, Message, Default, Input, Select, Textarea } from './styles';
 import Tabs from '~/components/Tabs';
 import Button from "~/components/Button";
 import { Toggle } from "~/components/Form";
@@ -17,7 +17,9 @@ export default class extends Component
 		editable: false,
 		canReboot: false,
 		canEdit: false,
-		editMode: false
+		editMode: false,
+		canEditMode: false,
+		onCancel: () => {}
 	};
 
 	constructor(props, context)
@@ -27,17 +29,21 @@ export default class extends Component
 		this.state = {
 			items: this.props.items,
 			copy: this.props.items,
-			editMode: this.props.editMode
+			editMode: this.props.editMode,
+			messageType: null,
+			showMessage: false,
+			message: '',
+			messageDelay: null,
 		}
 	}
 
 	renderEdit = (item, rootItem, index) => {
 		switch (item.Type) {
-			case 'bool': return <Toggle checked={item.Value} onChange={() => this.changeItem(item, rootItem, index, !item.Value)} />;
-			case 'text': return <input type="text" value={item.Value || ''} placeholder={item.DefaultValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)} />;
-			case 'int': return <input type="number" value={item.Value || ''} placeholder={item.DefaultValue} min={item.MinValue} max={item.MaxValue} step={item.StepValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)} />;
-			case 'textarea': return <textarea placeholder={item.DefaultValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)}>{item.Value || ''}</textarea>;
-			case 'select': return <select value={item.Value} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)}><option value={false}>---</option>{ Object.keys(item.SelectParams).map((param, paramIndex) => <option key={paramIndex} value={param}>{item.SelectParams[param]}</option>) }</select>;
+			case 'bool': return <Toggle changed={item.edited} checked={item.Value} onChange={() => this.changeItem(item, rootItem, index, !item.Value)} />;
+			case 'text': return <Input changed={item.edited} type="text" value={item.Value || ''} placeholder={item.DefaultValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)} />;
+			case 'int': return <Input changed={item.edited} type="number" value={item.Value || ''} placeholder={item.DefaultValue} min={item.MinValue} max={item.MaxValue} step={item.StepValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)} />;
+			case 'textarea': return <Textarea placeholder={item.DefaultValue} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)}>{item.Value || ''}</Textarea>;
+			case 'select': return <Select value={item.Value} onChange={(e) => this.changeItem(item, rootItem, index, e.target.value)}><option value={false}>---</option>{ Object.keys(item.SelectParams).map((param, paramIndex) => <option key={paramIndex} value={param}>{item.SelectParams[param]}</option>) }</Select>;
 			default: return <div>---</div>;
 		}
 	};
@@ -46,34 +52,79 @@ export default class extends Component
 		const newGroup = [];
 
 		this.state.copy[rootItem].map((field, fieldIndex) => {
-			newGroup.push(fieldIndex === index ? { ...field, Value: value || null } : field);
+			newGroup.push(fieldIndex === index ? { ...field, Value: value || null, edited: true } : field);
 		});
 
 		this.setState({ copy: { ...this.state.copy, [rootItem]: newGroup } });
 	};
 
-	reboot = async () => {
-		await this.props.reboot(this.props.ids);
+	editWithReboot = async () => {
+		if(confirm('Вы действительно хотите изменить и перезапустить выбранные устройства?')) {
+			this.setState({showMessage: false});
+			await this.edit(this.props.ids);
+			await this.props.reboot(this.props.ids);
 
-		if (this.props.rigs.error.code < 0) console.error('Reboot', this.props.rigs.error.message);
-		else console.warn('Reboot', 'OK');
+			if (typeof this.props.rigs.config === 'string')
+				this._showMessage('error', this.props.rigs.config);
+			else
+				this._showMessage('success', 'Успешно перезагружено');
+		}
 	};
 
 	edit = async () => {
-		const { copy } = this.state;
+		if(confirm('Вы действительно хотите изменить выбранные устройства?')) {
+			const {copy} = this.state;
 
-		const result = [];
+			this.setState({showMessage: false});
 
-		Object.keys(copy).map((group) => {
-			_.map(copy[group], (item) => {
-				result.push({ name: item.Name, value: item.Value, isEnabled: item.isEnabled });
-			})
+			const result = [];
+
+			Object.keys(copy).map((group) => {
+				_.map(copy[group], (item) => {
+					result.push({
+						name: item.Name,
+						value: item.Value,
+						isEnabled: item.isEnabled,
+						edited: item.edited || false
+					});
+				})
+			});
+
+			await this.props.edit(this.props.ids, result);
+
+			if (typeof this.props.rigs.config === 'string')
+				this._showMessage('error', this.props.rigs.error.message);
+			else
+				this._showMessage('success', 'Изменения успешно изменены');
+		}
+	};
+
+	_showMessage = (type, message) => {
+		clearTimeout(this.state.messageDelay);
+		this.setState({ messageType: type, showMessage: true, message });
+
+		this.setState({ messageDelay: setTimeout(() => this.setState({ showMessage: false }), 10000) });
+	};
+
+	setDefault = (item, rootItem, index) => {
+		const newGroup = [];
+
+		this.state.copy[rootItem].map((field, fieldIndex) => {
+			if (fieldIndex === index) {
+				let currentItem = null;
+				this.state.items[rootItem].map((itemField, itemIndex) => {
+					if (itemIndex === index)
+						currentItem = itemField;
+				});
+
+				newGroup.push({ ...field, Value: currentItem.Value, edited: false });
+			}
+			else {
+				newGroup.push(field);
+			}
 		});
 
-		await this.props.edit(this.props.ids, result);
-
-		if (typeof this.props.rigs.config === 'string') console.error('Edit', this.props.rigs.config);
-		else console.warn('Edit', 'OK');
+		this.setState({ copy: { ...this.state.copy, [rootItem]: newGroup } });
 	};
 
 	getItems = () => {
@@ -87,7 +138,13 @@ export default class extends Component
 						(subitem.Miners === null || subitem.Miners.includes(this.state.copy['Майнинг'].filter(item => item.Name === 'RUN')[0].Value)) ?
 							<Item key={subindex}>
 								<Title>{subitem.Description}</Title>
-								{ this.state.editMode ? this.renderEdit(subitem, item, subindex) : <Text>{subitem.Type === 'select' ? subitem.SelectParams[subitem.Value] :  subitem.Type === 'bool' ?  subitem.Value ? <Check /> : <Error /> : subitem.Value || '---'}</Text> }
+								{ this.state.editMode ?
+									<div style={{ display: 'flex', alignItems: 'center' }}>
+										{
+											this.renderEdit(subitem, item, subindex)
+										}
+										<Default onClick={() => this.setDefault(subitem, item, subindex)} title="Вернуть значение" />
+									</div> : <Text>{subitem.Type === 'select' ? subitem.SelectParams[subitem.Value] :  subitem.Type === 'bool' ?  subitem.Value ? <Check /> : <Error /> : subitem.Value || '---'}</Text> }
 								{ subitem.isDifferent ? <Different>Настройки отличаются</Different> : null }
 							</Item>
 						: null)
@@ -96,13 +153,13 @@ export default class extends Component
 						<Item>
 							{ this.state.editMode ? (
 								<Buttons>
-									<Button type="success" onClick={this.edit}>Сохранить</Button>
-									{ this.props.canReboot ? <Button type="warning" onClick={this.reboot}>Перезагрузить</Button> : null }
-									<Button type="error" onClick={() => this.setState({ editMode: !this.state.editMode, copy: this.state.items })}>Отмена</Button>
+									{ this.props.canEdit ? <Button type="success" onClick={this.edit}>Сохранить</Button> : null }
+									{ this.props.canReboot && this.props.canEdit ? <Button type="warning" onClick={this.editWithReboot}>Сохранить с перезагрузкой</Button> : null }
+									<Button type="error" onClick={() => { this.setState({ editMode: !this.state.editMode, copy: this.state.items }); this.props.onCancel() }}>Отмена</Button>
 								</Buttons>
 							) : (
 								<Buttons>
-									{ this.props.canEdit ? <Button type="success" onClick={() => this.setState({ editMode: !this.state.editMode })}>Редактировать</Button> : null }
+									{ this.props.canEditMode ? <Button type="success" onClick={() => this.setState({ editMode: !this.state.editMode })}>Редактировать</Button> : null }
 								</Buttons>
 							) }
 						</Item>
@@ -119,6 +176,7 @@ export default class extends Component
 		return (
 			<Container>
 				<Tabs items={this.getItems()} />
+				{ this.state.showMessage ? <Message type={this.state.messageType}>{ this.state.message }</Message> : null }
 			</Container>
 		);
 	}

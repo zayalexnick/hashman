@@ -17,7 +17,7 @@ export const getRig = (id) => async (dispatch) => {
     {
         dispatch(rigRequested());
 
-        const { data }: { data: IResult } = await api.get(`/api/rig/${id}`);
+        const { data }: { data: IResult } = await api.get(`/api/react/rig/${id}`);
 
         if (data.ErrorCode < 0)
             dispatch(rigFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -34,12 +34,12 @@ export const getRig = (id) => async (dispatch) => {
     }
 };
 
-export const getCharts = (id) => async (dispatch) => {
+export const getChartsRig = (id) => async (dispatch) => {
     try
     {
         dispatch(rigRequested());
 
-        const { data }: { data: IResult } = await api.get(`/api/infographs?r=${id}`);
+        const { data }: { data: IResult } = await api.get(`/api/react/infographs?r=${id}`);
 
         if (data.ErrorCode < 0)
             dispatch(rigFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -62,7 +62,7 @@ export const getEvents = (id) => async (dispatch) => {
     {
         dispatch(rigRequested());
 
-        const { data }: { data: IResult } = await api.get(`/api/events?r=${id}`);
+        const { data }: { data: IResult } = await api.get(`/api/react/events?r=${id}`);
 
         if (data.ErrorCode < 0)
             dispatch(rigFailed({ code: data.ErrorCode, message: data.ErrorString }));

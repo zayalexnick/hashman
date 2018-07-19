@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Button from "~/components/Button";
-import { Form, Inline, Required } from '../styles';
+import { Form, Inline, Required, Link } from '../styles';
 import { Input } from '~/components/Form';
 import Loader from '~/components/Loader';
 import Alert from '~/components/Alert';
@@ -40,6 +40,7 @@ export default class extends Component<Props>
                         <Required>Все поля обязательны</Required>
                         <Button type="primary" onClick={this.signinHandler}>Войти</Button>
                     </Inline>
+					<Link to="/signup">Зарегистрироваться</Link>
                 </Form>
             </Loader>
         );

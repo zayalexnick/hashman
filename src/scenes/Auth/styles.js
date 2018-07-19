@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import { rem } from 'polished';
+import { Link as RouterLink } from 'react-router-dom';
 
 export const Wrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   
   width: 100%;
   height: 100vh;
   
   overflow: hidden;
   
-  background: gray;
+  background: #fff;
 `;
 
 export const Content = styled.div`
@@ -70,4 +71,13 @@ export const Required = styled.div`
     
     color: ${ props => props.theme.colors.form.required.star };
   }
+`;
+
+export const Link = styled(RouterLink)`
+	align-self: center;
+	text-align: center;
+	
+	color: ${ props => props.theme.colors.base.blue };
+	font-size: ${ rem('14px') };
+	margin-top: 20px;
 `;

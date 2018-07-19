@@ -87,7 +87,8 @@ export default class extends Component
 {
     state = {
         update: null,
-		activeChart: null
+		activeChart: null,
+		showCharts: true
     };
 
     componentDidMount()
@@ -96,6 +97,8 @@ export default class extends Component
 
         this.setState({ update: setInterval(() => this.props.getServers(), 5000) });
     }
+
+    setShowCharts = () => this.setState({ showCharts: false });
 
     componentWillUnmount()
     {
@@ -110,7 +113,7 @@ export default class extends Component
         this.props.servers.entities.map((server) => items.push({
             label: server.ServerName,
             index: server.ServerID,
-            content: <RigsTable server={server} history={this.props.history} />
+            content: <RigsTable showCharts={this.setShowCharts} server={server} history={this.props.history} />
         }));
 
         return items;
@@ -161,7 +164,7 @@ export default class extends Component
         return (
             <div>
                 <Title>Устройства</Title>
-                <Row>
+				{this.state.showCharts ? <Row>
                     <Col xs={12} md={6} lg={3}>
                         <Paper title="Стабильность" loading={Object.keys(rigs.charts).length === 0} onMouseEnter={(e) => this.setState({ activeChart: 'stability' })} onMouseLeave={() => this.setState({ activeChart: null })}>
                             <ResponsiveContainer width="100%" height={135}>
@@ -202,6 +205,7 @@ export default class extends Component
                         </Paper>
                     </Col>
                 </Row>
+					: null }
                 <Paper title="Текущие устройства">
                     <LoaderContainer loading={servers.entities.length === 0}>
                         { servers.entities.length > 0 ? <Tabs items={this.getItems()} activeItem={match.params.id} onTab={() => this.props.rigsClear()} /> : null }

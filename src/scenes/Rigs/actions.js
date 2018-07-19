@@ -17,7 +17,7 @@ export const getRigs = (id) => async (dispatch) => {
     {
         dispatch(rigsRequested());
 
-        const { data }: { data: IResult } = await api.get(`/api/rigs/${id}`);
+        const { data }: { data: IResult } = await api.get(`/api/react/rigs/${id}`);
 
         if (data.ErrorCode < 0)
             dispatch(rigsFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -39,7 +39,7 @@ export const getCharts = (id) => async (dispatch) => {
     {
         dispatch(rigsRequested());
 
-        const { data }: { data: IResult } = await api.get(`/api/infographs?s=${id}`);
+        const { data }: { data: IResult } = await api.get(`/api/react/infographs?s=${id}`);
 
         if (data.ErrorCode < 0)
             dispatch(rigsFailed({ code: data.ErrorCode, message: data.ErrorString }));
@@ -61,14 +61,15 @@ export const reboot = (ids) => async (dispatch) => {
     {
         dispatch(rigsRequested());
 
-        const { data }: { data: IResult } = await api.post(`/api/reboot`, ids);
+        const { data }: { data: IResult } = await api.post(`/api/react/reboot`, ids);
 
-        if (data.ErrorCode < 0)
-            dispatch(rigsFailed({ code: data.ErrorCode, message: data.ErrorString }));
+		if (data.ErrorCode < 0)
+			dispatch(rigsConfig(data.ErrorString));
+		else rigsConfig(true);
     }
     catch (e)
     {
-        dispatch(rigsFailed({ code: null, message: e }));
+		dispatch(rigsConfig(e));
     }
     finally
     {
@@ -81,7 +82,7 @@ export const edit = (ids, result) => async (dispatch) => {
     {
         dispatch(rigsRequested());
 
-        const { data }: { data: IResult } = await api.post(`/api/config`, { rigs: ids, Configs: result });
+        const { data }: { data: IResult } = await api.post(`/api/react/config`, { rigs: ids, Configs: result });
 
         if (data.ErrorCode < 0)
             dispatch(rigsConfig(data.ErrorString));
@@ -89,7 +90,7 @@ export const edit = (ids, result) => async (dispatch) => {
     }
     catch (e)
     {
-        dispatch(rigsConfig(message: e));
+        dispatch(rigsConfig(e));
     }
     finally
     {
@@ -102,7 +103,7 @@ export const getGConfig = (ids) => async (dispatch) => {
     {
         dispatch(rigsRequested());
 
-        const { data }: { data: IResult } = await api.post(`/api/gconfig`, { rigs: ids });
+        const { data }: { data: IResult } = await api.post(`/api/react/gconfig`, { rigs: ids });
 
         if (data.ErrorCode < 0)
             dispatch(rigsConfig({ code: data.ErrorCode, message: data.ErrorString }));

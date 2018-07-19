@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { lighten, rem, rgba, transitions } from 'polished';
 import CheckIcon from 'react-icons/lib/fa/check';
 import ErrorIcon from 'react-icons/lib/fa/close';
+import RefreshIcon from 'react-icons/lib/fa/refresh';
 
 export const Container = styled.div`
 	margin-bottom: 20px;
@@ -155,4 +156,42 @@ export const Different = styled.p`
 	color: ${ props => props.theme.notifications.warning };
 	font-size: ${ rem('12px') };
 	margin-top: 5px;
+`;
+
+export const Message = styled.div`
+	position: fixed;
+	right: 15px;
+	bottom: 15px;
+	
+	color: ${ props => props.theme.colors.base.white };
+	padding: 15px 20px;
+	
+	z-index: 999999;
+	
+	justify-self: flex-start;
+	
+	background: ${ props => props.theme.notifications[props.type] };
+`;
+
+export const Default = styled(RefreshIcon)`
+	font-size: 12px;
+	
+	margin-left: 5px;
+	
+	cursor: pointer;
+	
+	color: ${ props => props.theme.notifications.hidden };
+`;
+
+export const Input = styled.input`
+	${ props => console.log(props.changed) };
+	${ props => props.changed ? `border-color: ${props.theme.notifications.warning} !important` : null };
+`;
+
+export const Textarea = styled.textarea`
+	${ props => props.changed ? `border-color: ${props.theme.notifications.warning}` : null };
+`;
+
+export const Select = styled.select`
+	${ props => props.changed ? `border-color: ${props.theme.notifications.warning}` : null };
 `;

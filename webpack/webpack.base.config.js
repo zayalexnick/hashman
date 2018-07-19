@@ -4,7 +4,7 @@ import HTMLPlugin from 'html-webpack-plugin';
 
 export default new Config().merge({
     entry: [ 'babel-polyfill', path.resolve(__dirname, '..', 'src', 'index.js') ],
-    output: { path: path.resolve(__dirname, '..', 'dist') },
+    output: { path: path.resolve(__dirname, '..', 'dist'), publicPath: '/' },
     resolve: {
         extensions: ['.jsx', '.js'],
         alias: {
@@ -28,7 +28,7 @@ export default new Config().merge({
     plugins: [
         new HTMLPlugin({
             template: path.resolve(__dirname, '..', 'src', 'index.html'),
-            inject: false
+            inject: 'body'
         })
     ]
 });

@@ -17,7 +17,8 @@ export default class extends Component // TODO Сделать сортировк
 		selected: false,
 		footer: null,
         onRow: (record) => ({}),
-		onRowClick: (record) => ({})
+		onRowClick: (record) => ({}),
+		hideHeader: false
     };
 
     constructor(props, context)
@@ -41,7 +42,8 @@ export default class extends Component // TODO Сделать сортировк
             headerPosition: 0,
 			selected: this.props.selected,
 			selectedColumns: [],
-            columnWidth: {}
+            columnWidth: {},
+			hideHeader: this.props.hideHeader
         };
     }
 
@@ -245,16 +247,16 @@ export default class extends Component // TODO Сделать сортировк
                 <TableContainer>
                     { this.state.fixedHeader ? (
                         <Table fixed top={this.state.headerPosition} onClick={(e) => console.log('TABLE')}>
-                            <Header ref="header">
-                                <Row>
+							<Header ref="header">
+								<Row>
 									{ selected ? <SelectColumn all checked={this.allChecked()} hasActive={this.hasActive()} onChange={this.selectAll} /> : null }
-                                    { columns.map((column, index) => <HeaderColumn ref={column.index} width={this.state.columnWidth[column.index]} key={index} { ...column } compareBy={this.compareBy} addFilter={this.addFilter} removeFilter={this.removeFilter} sorterColumn={this.state.sorterColumn} activeFilter={Object.keys(this.state.filters).includes(column.index)} source={dataSource} />) }
-                                </Row>
-                            </Header>
+									{ columns.map((column, index) => <HeaderColumn ref={column.index} width={this.state.columnWidth[column.index]} key={index} { ...column } compareBy={this.compareBy} addFilter={this.addFilter} removeFilter={this.removeFilter} sorterColumn={this.state.sorterColumn} activeFilter={Object.keys(this.state.filters).includes(column.index)} source={dataSource} />) }
+								</Row>
+							</Header>
                         </Table>
                     ) : null }
-                    <Table ref="table" topOffset={this.state.headerHeight}>
-                        { !this.state.fixedHeader ? (
+						<Table ref="table" topOffset={this.state.headerHeight}>
+                        { !this.state.fixedHeader || !this.state.hideHeader ? (
                             <Header ref="header">
                                 <Row>
 									{ selected ? <SelectColumn all checked={this.allChecked()} hasActive={this.hasActive()} onChange={this.selectAll} /> : null }
@@ -264,7 +266,7 @@ export default class extends Component // TODO Сделать сортировк
                         ) : null }
                         <Body>
                             { source.map((item, index) => (
-                                <Row key={index}>
+                                <Row key={index} selected={this.state.selectedColumns.includes(item.RigID)}>
 									{ selected ? <SelectColumn { ...item } index={index} checked={selectedColumns.includes(item.RigID)} onChange={this.selectColumn} /> : null }
                                     { columns.map((column) => <Column onClick={() => this.props.onRowClick(item)} key={`${column.index}-${index}`} { ...column } record={ item } onRow={this.props.onRow} setColumnWidth={this.setColumnWidth} />) }
                                 </Row>
